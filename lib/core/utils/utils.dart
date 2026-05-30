@@ -18,7 +18,7 @@ extension ResponsiveContext on BuildContext {
 }
 
 const kBgColor = Color.fromARGB(255, 255, 246, 246);
-const kPrimaryColor = Color(0xff5D5FEF);
+const kPrimaryColor = Color(0xff1443C3);
 const kSecondaryColor = Color(0xff6C757D);
 const kBlackColor = Colors.black;
 const kWhiteColor = Colors.white;
