@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/core/widgets/button.dart';
 import 'package:froggy_mobile/core/widgets/form_input.dart';
+import 'package:froggy_mobile/core/widgets/loading.dart';
 import 'package:froggy_mobile/features/auth/bloc/auth_bloc.dart';
 import 'package:froggy_mobile/features/auth/presentation/widgets/auth_header.dart';
 
@@ -30,47 +31,51 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       },
       child: Scaffold(
         backgroundColor: kBgColor,
-        body: Container(
-          width: context.screenWidth,
-          height: context.screenHeight,
-          padding: EdgeInsets.symmetric(
-            horizontal: context.screenWidth * kHorizontalPadding,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const AuthHeader(
-                  label: 'Forgot Password',
-                  subtitle: 'Enter your email to receive an OTP',
-                ),
+        body: Stack(
+          children: [
+            Container(
+              width: context.screenWidth,
+              height: context.screenHeight,
+              padding: EdgeInsets.symmetric(
+                horizontal: context.screenWidth * kHorizontalPadding,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const AuthHeader(
+                      label: 'Forgot Password',
+                      subtitle: 'Enter your email to receive an OTP',
+                    ),
 
-                FormInput(
-                  textEditingController: emailController,
-                  title: 'Email Address',
-                  label: 'Enter your email',
-                  mail: true,
+                    FormInput(
+                      textEditingController: emailController,
+                      title: 'Email Address',
+                      label: 'Enter your email',
+                      mail: true,
+                    ),
+                    const SizedBox(height: 30),
+                    GestureDetector(
+                      onTap: () {
+                        context.read<AuthBloc>().add(
+                          ForgotPasswordRequested(emailController.text),
+                        );
+                      },
+                      child: const Button(label: 'Send OTP'),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-                const SizedBox(height: 30),
-                BlocBuilder<AuthBloc, AuthState>(
-                  builder: (context, state) {
-                    return GestureDetector(
-                      onTap: state.status == AuthStatus.loading
-                          ? null
-                          : () {
-                              context.read<AuthBloc>().add(
-                                ForgotPasswordRequested(emailController.text),
-                              );
-                            },
-                      child: state.status == AuthStatus.loading
-                          ? const CircularProgressIndicator()
-                          : const Button(label: 'Send OTP'),
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-              ],
+              ),
             ),
-          ),
+            BlocBuilder<AuthBloc, AuthState>(
+              builder: (context, state) {
+                if (state.status == AuthStatus.loading) {
+                  return const Loading();
+                }
+                return const SizedBox.shrink();
+              },
+            ),
+          ],
         ),
       ),
     );
