@@ -121,6 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     const SizedBox(height: 20),
                     GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         context.read<AuthBloc>().add(
                           RegisterRequested({
                             'full_name': fullNameController.text,
