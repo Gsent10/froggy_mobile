@@ -33,6 +33,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: kBgColor,
         body: Container(
           width: context.screenWidth,
           height: context.screenHeight,
