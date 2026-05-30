@@ -42,6 +42,7 @@ class _RegisterPageState extends State<RegisterPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: kBgColor,
         body: Container(
           width: context.screenWidth,
           height: context.screenHeight,
