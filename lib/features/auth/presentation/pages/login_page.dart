@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
                     // Submit Button
                     GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         context.read<AuthBloc>().add(
                           LoginRequested(
                             emailController.text,
