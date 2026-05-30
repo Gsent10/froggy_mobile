@@ -13,7 +13,7 @@ class AuthHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(height: context.screenHeight * kBarHeight),
+        SizedBox(height: context.screenHeight * kSpacingXL),
 
         if (Navigator.canPop(context))
           Align(
@@ -22,12 +22,11 @@ class AuthHeader extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               icon: const Icon(Icons.arrow_back_ios_new, color: kBlackColor),
               padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+              constraints: const BoxConstraints(minWidth: 0, minHeight: 0),
+              visualDensity: VisualDensity.compact,
+              splashRadius: 18,
             ),
           ),
-
-        if (Navigator.canPop(context))
-          SizedBox(height: context.screenHeight * kSpacingM),
 
         // Title
         Text(
