@@ -64,6 +64,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     RegisterRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (event.userData['full_name'].isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Full name field cannot be empty',
+        ),
+      );
+      return;
+    }
+
+    if (event.userData['email'].isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Email field cannot be empty',
+        ),
+      );
+      return;
+    }
+
+    if (event.userData['phone_number'].isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Phone number field cannot be empty',
+        ),
+      );
+      return;
+    }
+
+    if (event.userData['password'].isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Password field cannot be empty',
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(status: AuthStatus.loading));
     await _apiEndpoints.safeSendRequest(
       request: (dio, headers) => dio.post(
@@ -89,6 +129,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     VerifyOtpRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (event.otp.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'OTP field cannot be empty',
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(status: AuthStatus.loading));
     await _apiEndpoints.safeSendRequest(
       request: (dio, headers) => dio.post(
@@ -124,6 +174,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ResendOtpRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (event.email.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Email cannot be empty',
+        ),
+      );
+      return;
+    }
+
+    emit(state.copyWith(status: AuthStatus.loading));
     await _apiEndpoints.safeSendRequest(
       request: (dio, headers) => dio.post(
         ApiEndpoints.RESEND_OTP,
@@ -131,8 +192,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         options: Options(headers: headers),
       ),
       onSuccess: (data) {
-        // Handle success if needed (toast is already handled in safeSendRequest if not overridden)
+        emit(
+          state.copyWith(
+            status: AuthStatus.otpRequired,
+            email: event.email,
+            isFromRegister: true,
+          ),
+        );
       },
+      onError: (error) =>
+          emit(state.copyWith(status: AuthStatus.error, errorMessage: error)),
     );
   }
 
@@ -140,6 +209,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ForgotPasswordRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (event.email.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Email cannot be empty',
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(status: AuthStatus.loading));
     await _apiEndpoints.safeSendRequest(
       request: (dio, headers) => dio.post(
@@ -165,6 +244,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     ResetPasswordRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (event.password.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Password cannot be empty',
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(status: AuthStatus.loading));
     await _apiEndpoints.safeSendRequest(
       request: (dio, headers) => dio.post(
