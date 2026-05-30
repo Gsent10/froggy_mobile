@@ -75,13 +75,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     Expanded(
                       flex: 2,
                       child: Container(
-                        height: 55, // Match FormInput height approximately
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
+                        height: 55,
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: selectedCountryCode,
