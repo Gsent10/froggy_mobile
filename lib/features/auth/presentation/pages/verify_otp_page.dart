@@ -42,22 +42,15 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    const AuthHeader(label: 'Verify OTP'),
-                    const SizedBox(height: 20),
                     BlocBuilder<AuthBloc, AuthState>(
                       builder: (context, state) {
-                        return Text(
-                          'Enter the OTP sent to ${state.email ?? "your email"}',
-                          textAlign: TextAlign.center,
-                          style: SafeGoogleFont(
-                            'Ubuntu',
-                            fontSize: context.screenWidth * kFontM,
-                            fontWeight: FontWeight.w400,
-                          ),
+                        return AuthHeader(
+                          label: 'Verify OTP',
+                          subtitle:
+                              'Enter the OTP sent to your email ${state.email ?? ''}',
                         );
                       },
                     ),
-                    const SizedBox(height: 30),
                     Pinput(
                       length: 6,
                       controller: otpController,
