@@ -13,11 +13,15 @@ class LaunchScreen extends StatelessWidget {
       listener: (context, state) {
         if (state.status == LaunchStatus.toLogin) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const LoginPage()),
+            MaterialPageRoute(
+              builder: (_) => const LoginPage(isFirstPage: true),
+            ),
           );
         } else if (state.status == LaunchStatus.toRegister) {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const RegisterPage()),
+            MaterialPageRoute(
+              builder: (_) => const RegisterPage(isFirstPage: true),
+            ),
           );
         }
       },
