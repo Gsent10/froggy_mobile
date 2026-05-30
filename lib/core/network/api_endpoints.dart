@@ -9,7 +9,7 @@ import 'package:froggy_mobile/core/utils/utils.dart';
 class ApiEndpoints {
   static const String API_DOMAIN =
       "https://xxxxxxxxx.com"; // Input actual domain
-  static const String API_PREFIX = '${ApiEndpoints.API_DOMAIN}/api/';
+  static const String API_PREFIX = '${ApiEndpoints.API_DOMAIN}/api';
 
   final Dio _dio = Dio(
     BaseOptions(
