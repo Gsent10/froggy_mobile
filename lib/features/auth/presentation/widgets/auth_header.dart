@@ -14,7 +14,7 @@ class AuthHeader extends StatelessWidget {
 
         // Title
         Text(
-          'Login Page',
+          'Login',
           style: SafeGoogleFont(
             'Ubuntu',
             fontSize: context.screenWidth * kFontL,
@@ -23,6 +23,8 @@ class AuthHeader extends StatelessWidget {
             decoration: TextDecoration.none,
           ),
         ),
+
+        SizedBox(height: context.screenHeight * kSpacingXL),
       ],
     );
   }
