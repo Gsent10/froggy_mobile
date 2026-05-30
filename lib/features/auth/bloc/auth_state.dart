@@ -7,6 +7,7 @@ enum AuthStatus {
   unauthenticated,
   otpRequired,
   otpVerified,
+  failed,
   error,
 }
 
