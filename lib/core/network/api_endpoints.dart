@@ -1,5 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -40,8 +42,8 @@ class ApiEndpoints {
   Future<void> safeSendRequest({
     required Future<Response> Function(Dio dio, Map<String, String> headers)
     request,
-    required Function(Map<String, dynamic> data) onSuccess,
-    Function(String error)? onError,
+    required FutureOr<void> Function(Map<String, dynamic> data) onSuccess,
+    FutureOr<void> Function(String error)? onError,
   }) async {
     try {
       final headers = await authRequestHeaders();
@@ -53,9 +55,9 @@ class ApiEndpoints {
 
       if ([200, 201].contains(response.statusCode)) {
         if (response.data is Map<String, dynamic>) {
-          onSuccess(response.data);
+          await onSuccess(response.data);
         } else {
-          onSuccess({});
+          await onSuccess({});
         }
       }
     } on DioException catch (e) {
@@ -91,7 +93,7 @@ class ApiEndpoints {
       );
 
       if (onError != null) {
-        onError(errorMsg);
+        await onError(errorMsg);
       }
 
       if (e.response?.statusCode == 401) {
@@ -116,7 +118,7 @@ class ApiEndpoints {
       );
 
       if (onError != null) {
-        onError(errorMsg);
+        await onError(errorMsg);
       }
     }
   }
