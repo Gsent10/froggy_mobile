@@ -40,8 +40,6 @@ const kFontM = 0.05;
 const kFontS = 0.04;
 const kFontXS = 0.03;
 
-const kAppBarHeight = 0.2;
-
 TextStyle SafeGoogleFont(
   String fontFamily, {
   TextStyle? textStyle,
