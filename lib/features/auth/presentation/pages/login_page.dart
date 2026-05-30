@@ -44,7 +44,11 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const AuthHeader(label: 'Login'),
+                AuthHeader(
+                  label: 'Login',
+                  subtitle: 'Welcome back! Please login to your account',
+                  isFirstPage: widget.isFirstPage,
+                ),
 
                 // Form Items
                 FormInput(
