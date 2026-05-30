@@ -68,37 +68,25 @@ class _RegisterPageState extends State<RegisterPage> {
                   mail: true,
                 ),
                 Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Expanded(
                       flex: 2,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Country',
-                            style: SafeGoogleFont(
-                              'Ubuntu',
-                              fontSize: context.screenWidth * kFontS,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          DropdownButton<String>(
-                            value: selectedCountryCode,
-                            isExpanded: true,
-                            items: countries.map((country) {
-                              return DropdownMenuItem(
-                                value: country['code'],
-                                child: Text(country['code']!),
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              setState(() {
-                                selectedCountryCode = val!;
-                              });
-                            },
-                          ),
-                        ],
+                      child: DropdownButton<String>(
+                        value: selectedCountryCode,
+                        isExpanded: true,
+                        items: countries.map((country) {
+                          return DropdownMenuItem(
+                            value: country['code'],
+                            child: Text(country['code']!),
+                          );
+                        }).toList(),
+                        onChanged: (val) {
+                          setState(() {
+                            selectedCountryCode = val!;
+                          });
+                        },
                       ),
                     ),
                     const SizedBox(width: 10),
