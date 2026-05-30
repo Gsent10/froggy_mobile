@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/core/widgets/button.dart';
 import 'package:froggy_mobile/core/widgets/loading.dart';
@@ -27,6 +28,15 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
           ).pushNamedAndRemoveUntil('/dashboard', (route) => false);
         } else if (state.status == AuthStatus.otpVerified) {
           Navigator.of(context).pushReplacementNamed('/new-password');
+        } else if (state.status == AuthStatus.failed) {
+          Fluttertoast.showToast(
+            msg: state.errorMessage ?? 'Request failed. Please try again.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            textColor: kWhiteColor,
+            fontSize: 17,
+            backgroundColor: Colors.red,
+          );
         }
       },
       child: Scaffold(
