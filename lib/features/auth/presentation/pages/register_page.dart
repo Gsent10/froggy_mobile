@@ -52,7 +52,11 @@ class _RegisterPageState extends State<RegisterPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                AuthHeader(label: 'Register', subtitle: 'Create a new account'),
+                AuthHeader(
+                  label: 'Register',
+                  subtitle: 'Create a new account',
+                  isFirstPage: widget.isFirstPage,
+                ),
                 FormInput(
                   textEditingController: fullNameController,
                   title: 'Full Name',
