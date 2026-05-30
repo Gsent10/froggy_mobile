@@ -27,10 +27,6 @@ class _LoginPageState extends State<LoginPage> {
           Navigator.of(
             context,
           ).pushNamedAndRemoveUntil('/dashboard', (route) => false);
-        } else if (state.status == AuthStatus.error) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.errorMessage ?? 'An error occurred')),
-          );
         }
       },
       child: Scaffold(
