@@ -24,6 +24,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     LoginRequested event,
     Emitter<AuthState> emit,
   ) async {
+    if (event.email.isEmpty || event.password.isEmpty) {
+      emit(
+        state.copyWith(
+          status: AuthStatus.failed,
+          errorMessage: 'Email and password cannot be empty',
+        ),
+      );
+      return;
+    }
+
     emit(state.copyWith(status: AuthStatus.loading));
     await _apiEndpoints.safeSendRequest(
       request: (dio, headers) => dio.post(
