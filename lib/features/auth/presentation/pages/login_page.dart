@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: kBgColor,
         body: Container(
           width: context.screenWidth,
           height: context.screenHeight,
