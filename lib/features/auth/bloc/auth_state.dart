@@ -7,7 +7,7 @@ enum AuthStatus {
   unauthenticated,
   otpRequired,
   otpVerified,
-  error
+  error,
 }
 
 @immutable
