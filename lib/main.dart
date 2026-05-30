@@ -14,7 +14,7 @@ import 'package:froggy_mobile/features/launch/presentation/pages/launch_screen.d
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserSimplePreferences.init();
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
