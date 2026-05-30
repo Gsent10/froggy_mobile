@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:froggy_mobile/core/utils/user_simple_preferences.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
+import 'package:froggy_mobile/main.dart';
 
 class ApiEndpoints {
   static const String API_DOMAIN =
@@ -80,7 +81,12 @@ class ApiEndpoints {
       }
 
       if (e.response?.statusCode == 401) {
-        // Handle unauthenticated globally if needed
+        // Handle unauthenticated globally
+        UserSimplePreferences.setToken("");
+        MyApp.navigatorKey.currentState?.pushNamedAndRemoveUntil(
+          '/login',
+          (route) => false,
+        );
       }
     } catch (e) {
       debugPrint("Unexpected error: $e");
