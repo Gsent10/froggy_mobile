@@ -7,6 +7,7 @@ import 'package:froggy_mobile/features/auth/presentation/pages/login_page.dart';
 import 'package:froggy_mobile/features/auth/presentation/pages/new_password_page.dart';
 import 'package:froggy_mobile/features/auth/presentation/pages/register_page.dart';
 import 'package:froggy_mobile/features/auth/presentation/pages/verify_otp_page.dart';
+import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:froggy_mobile/features/launch/bloc/launch_bloc.dart';
 import 'package:froggy_mobile/features/launch/presentation/pages/launch_screen.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
           create: (context) => LaunchBloc()..add(CheckLaunchStatus()),
         ),
         BlocProvider(create: (context) => AuthBloc()),
+        BlocProvider(create: (context) => DashboardBloc()),
       ],
       child: MaterialApp(
         title: 'Froggy Mobile',
