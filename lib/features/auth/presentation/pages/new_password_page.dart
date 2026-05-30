@@ -37,6 +37,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: kBgColor,
         body: Container(
           width: context.screenWidth,
           height: context.screenHeight,
