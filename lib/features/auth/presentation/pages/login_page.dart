@@ -7,7 +7,8 @@ import 'package:froggy_mobile/features/auth/bloc/auth_bloc.dart';
 import 'package:froggy_mobile/features/auth/presentation/widgets/auth_header.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final bool isFirstPage;
+  const LoginPage({super.key, this.isFirstPage = false});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -110,41 +111,42 @@ class _LoginPageState extends State<LoginPage> {
 
                 SizedBox(height: context.screenHeight * kSpacingL),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      "Don't have an Account? ",
-                      style: SafeGoogleFont(
-                        'Ubuntu',
-                        fontSize: context.screenWidth * kFontS,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/register');
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: Text(
-                        "Sign up here",
+                if (widget.isFirstPage)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        "Don't have an Account? ",
                         style: SafeGoogleFont(
                           'Ubuntu',
                           fontSize: context.screenWidth * kFontS,
-                          fontWeight: FontWeight.w600,
-                          color: kPrimaryColor,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
                         ),
                       ),
-                    ),
-                  ],
-                ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('/register');
+                        },
+                        style: TextButton.styleFrom(
+                          padding: EdgeInsets.zero,
+                          minimumSize: Size.zero,
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                        child: Text(
+                          "Sign up here",
+                          style: SafeGoogleFont(
+                            'Ubuntu',
+                            fontSize: context.screenWidth * kFontS,
+                            fontWeight: FontWeight.w600,
+                            color: kPrimaryColor,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
           ),
