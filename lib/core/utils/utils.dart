@@ -17,7 +17,7 @@ extension ResponsiveContext on BuildContext {
   double get screenHeight => MediaQuery.sizeOf(this).height;
 }
 
-const kBgColor = Color.fromARGB(255, 255, 246, 246);
+const kBgColor = kWhiteColor;
 const kPrimaryColor = Color(0xff1443C3);
 const kSecondaryColor = Color(0xff6C757D);
 const kBlackColor = Colors.black;
