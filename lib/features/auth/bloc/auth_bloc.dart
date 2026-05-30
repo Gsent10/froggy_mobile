@@ -265,7 +265,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         options: Options(headers: headers),
       ),
       onSuccess: (data) {
-        emit(state.copyWith(status: AuthStatus.unauthenticated));
+        emit(state.copyWith(status: AuthStatus.authenticated));
       },
       onError: (error) =>
           emit(state.copyWith(status: AuthStatus.error, errorMessage: error)),
