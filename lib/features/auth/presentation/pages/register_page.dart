@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/core/widgets/button.dart';
 import 'package:froggy_mobile/core/widgets/form_input.dart';
@@ -21,7 +22,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String selectedCountryCode = 'GB';
+  String selectedCountryCode = 'NG';
   final List<Map<String, String>> countries = [
     {'code': 'GB', 'name': 'United Kingdom', 'flag': 'assets/flags/GB.png'},
     {'code': 'NG', 'name': 'Nigeria', 'flag': 'assets/flags/NG.png'},
@@ -36,6 +37,15 @@ class _RegisterPageState extends State<RegisterPage> {
       listener: (context, state) {
         if (state.status == AuthStatus.otpRequired) {
           Navigator.of(context).pushNamed('/verify-otp');
+        } else if (state.status == AuthStatus.failed) {
+          Fluttertoast.showToast(
+            msg: state.errorMessage ?? 'Request failed. Please try again.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            textColor: kWhiteColor,
+            fontSize: 17,
+            backgroundColor: Colors.red,
+          );
         }
       },
       child: Scaffold(
@@ -107,6 +117,7 @@ class _RegisterPageState extends State<RegisterPage> {
                             textEditingController: phoneController,
                             title: 'Phone Number',
                             label: 'Enter your phone number',
+                            num: true,
                           ),
                         ),
                       ],
