@@ -19,6 +19,15 @@ class ApiEndpoints {
     ),
   );
 
+  // Auth Endpoints
+  static const String LOGIN = '/login';
+  static const String REGISTER = '/register';
+  static const String VERIFY_OTP = '/verify-otp';
+  static const String RESEND_OTP = '/resend-otp';
+  static const String FORGOT_PASSWORD = '/forgot-password';
+  static const String RESET_PASSWORD = '/reset-password';
+  static const String LOGOUT = '/logout';
+
   Future<Map<String, String>> authRequestHeaders() async {
     return {
       "Content-Type": "application/json",
@@ -27,13 +36,15 @@ class ApiEndpoints {
     };
   }
 
-  Future<void> safeSendRequest(
-    Future<Response> Function(Dio dio, Map<String, String> headers) mainRequest,
-    String? Function(Map<String, dynamic> response) handleSuccess,
-  ) async {
+  Future<void> safeSendRequest({
+    required Future<Response> Function(Dio dio, Map<String, String> headers)
+    request,
+    required Function(Map<String, dynamic> data) onSuccess,
+    Function(String error)? onError,
+  }) async {
     try {
       final headers = await authRequestHeaders();
-      final response = await mainRequest(_dio, headers);
+      final response = await request(_dio, headers);
 
       debugPrint(
         "Response status: ${response.statusCode} Body: ${response.data}",
@@ -41,37 +52,50 @@ class ApiEndpoints {
 
       if ([200, 201].contains(response.statusCode)) {
         if (response.data is Map<String, dynamic>) {
-          String? operationMessage = handleSuccess(response.data);
-          debugPrint("Response body: $operationMessage");
+          onSuccess(response.data);
+        } else {
+          onSuccess({});
         }
       }
     } on DioException catch (e) {
       debugPrint("Dio error: ${e.message}");
-
-      if (e.response?.statusCode == 401) {
-        throw Exception('Unauthenticated');
-      }
+      debugPrint("Dio response: ${e.response?.data}");
 
       String errorMsg = "Request failed, please try again later";
-      if (e.response?.statusCode == 422 && e.response?.data != null) {
+      if (e.response?.data != null && e.response?.data is Map) {
         errorMsg = e.response?.data["message"]?.toString() ?? errorMsg;
       }
 
-      if (e.response?.data != null) {
-        errorMsg = e.response?.data["message"]?.toString() ?? errorMsg;
+      if (onError != null) {
+        onError(errorMsg);
+      } else {
+        Fluttertoast.showToast(
+          msg: errorMsg,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          textColor: kWhiteColor,
+          fontSize: 17,
+          backgroundColor: Colors.red,
+        );
       }
 
-      Fluttertoast.showToast(
-        msg: errorMsg,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.BOTTOM,
-        textColor: kWhiteColor,
-        fontSize: 17,
-        backgroundColor: Colors.red,
-      );
+      if (e.response?.statusCode == 401) {
+        // Handle unauthenticated globally if needed
+      }
     } catch (e) {
       debugPrint("Unexpected error: $e");
-      throw Exception('Something went wrong!');
+      if (onError != null) {
+        onError("Something went wrong!");
+      } else {
+        Fluttertoast.showToast(
+          msg: "Something went wrong!",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          textColor: kWhiteColor,
+          fontSize: 17,
+          backgroundColor: Colors.red,
+        );
+      }
     }
   }
 }
