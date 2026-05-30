@@ -14,10 +14,10 @@ enum AuthStatus {
 class AuthState {
   final AuthStatus status;
   final String? errorMessage;
-  final String? email; // To persist email during OTP flow
+  final String? email;
   final bool isFromRegister;
 
-  AuthState({
+  const AuthState({
     this.status = AuthStatus.initial,
     this.errorMessage,
     this.email,
