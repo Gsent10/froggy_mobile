@@ -53,6 +53,10 @@ class ApiEndpoints {
       }
 
       String errorMsg = "Request failed, please try again later";
+      if (e.response?.statusCode == 422 && e.response?.data != null) {
+        errorMsg = e.response?.data["message"]?.toString() ?? errorMsg;
+      }
+
       if (e.response?.data != null) {
         errorMsg = e.response?.data["message"]?.toString() ?? errorMsg;
       }
