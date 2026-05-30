@@ -58,6 +58,7 @@ class AuthHeader extends StatelessWidget {
               color: kBlackColor,
               decoration: TextDecoration.none,
             ),
+            textAlign: TextAlign.center,
           ),
         SizedBox(height: context.screenHeight * kSpacingXL),
       ],
