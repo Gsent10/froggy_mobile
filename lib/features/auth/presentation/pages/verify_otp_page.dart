@@ -71,14 +71,6 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                       ),
                       onCompleted: (pin) {
                         FocusManager.instance.primaryFocus?.unfocus();
-                        final state = context.read<AuthBloc>().state;
-                        context.read<AuthBloc>().add(
-                          VerifyOtpRequested(
-                            email: state.email ?? '',
-                            otp: pin,
-                            isFromRegister: state.isFromRegister,
-                          ),
-                        );
                       },
                     ),
                     const SizedBox(height: 40),
