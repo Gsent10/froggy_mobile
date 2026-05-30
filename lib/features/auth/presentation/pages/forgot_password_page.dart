@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/core/widgets/button.dart';
 import 'package:froggy_mobile/core/widgets/form_input.dart';
@@ -23,6 +24,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       listener: (context, state) {
         if (state.status == AuthStatus.otpRequired) {
           Navigator.of(context).pushNamed('/verify-otp');
+        } else if (state.status == AuthStatus.failed) {
+          Fluttertoast.showToast(
+            msg: state.errorMessage ?? 'Request failed. Please try again.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            textColor: kWhiteColor,
+            fontSize: 17,
+            backgroundColor: Colors.red,
+          );
         }
       },
       child: Scaffold(
@@ -54,8 +64,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       onTap: () {
                         FocusManager.instance.primaryFocus?.unfocus();
                         context.read<AuthBloc>().add(
-                              ForgotPasswordRequested(emailController.text),
-                            );
+                          ForgotPasswordRequested(emailController.text),
+                        );
                       },
                       child: const Button(label: 'Send OTP'),
                     ),
