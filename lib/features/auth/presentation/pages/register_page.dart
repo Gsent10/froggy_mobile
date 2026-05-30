@@ -19,7 +19,6 @@ class _RegisterPageState extends State<RegisterPage> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   String selectedCountryCode = 'GB';
   final List<Map<String, String>> countries = [
@@ -119,12 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   label: 'Enter your password',
                   pass: true,
                 ),
-                FormInput(
-                  textEditingController: confirmPasswordController,
-                  title: 'Confirm Password',
-                  label: 'Confirm your password',
-                  pass: true,
-                ),
+
                 const SizedBox(height: 20),
                 BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
@@ -140,7 +134,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   'country_code': selectedCountryCode,
                                   'password': passwordController.text,
                                   'password_confirmation':
-                                      confirmPasswordController.text,
+                                      passwordController.text,
                                 }),
                               );
                             },
