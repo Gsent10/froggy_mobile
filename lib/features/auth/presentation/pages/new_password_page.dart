@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/core/widgets/button.dart';
 import 'package:froggy_mobile/core/widgets/form_input.dart';
@@ -16,7 +17,6 @@ class NewPasswordPage extends StatefulWidget {
 
 class _NewPasswordPageState extends State<NewPasswordPage> {
   final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           Navigator.of(
             context,
           ).pushNamedAndRemoveUntil('/login', (route) => false);
+        } else if (state.status == AuthStatus.failed) {
+          Fluttertoast.showToast(
+            msg: state.errorMessage ?? 'Request failed. Please try again.',
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            textColor: kWhiteColor,
+            fontSize: 17,
+            backgroundColor: Colors.red,
+          );
         }
       },
       child: Scaffold(
@@ -57,22 +66,16 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                       label: 'Enter your new password',
                       pass: true,
                     ),
-                    FormInput(
-                      textEditingController: confirmPasswordController,
-                      title: 'Confirm Password',
-                      label: 'Confirm your new password',
-                      pass: true,
-                    ),
                     const SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
                         FocusManager.instance.primaryFocus?.unfocus();
                         context.read<AuthBloc>().add(
-                              ResetPasswordRequested(
-                                passwordController.text,
-                                confirmPasswordController.text,
-                              ),
-                            );
+                          ResetPasswordRequested(
+                            passwordController.text,
+                            passwordController.text,
+                          ),
+                        );
                       },
                       child: const Button(label: 'Reset Password'),
                     ),
