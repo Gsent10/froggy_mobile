@@ -22,11 +22,11 @@ class _RegisterPageState extends State<RegisterPage> {
 
   String selectedCountryCode = 'GB';
   final List<Map<String, String>> countries = [
-    {'code': 'GB', 'name': 'United Kingdom'},
-    {'code': 'NG', 'name': 'Nigeria'},
-    {'code': 'US', 'name': 'United States'},
-    {'code': 'GH', 'name': 'Ghana'},
-    {'code': 'KE', 'name': 'Kenya'},
+    {'code': 'GB', 'name': 'United Kingdom', 'flag': 'assets/flags/GB.png'},
+    {'code': 'NG', 'name': 'Nigeria', 'flag': 'assets/flags/NG.png'},
+    {'code': 'US', 'name': 'United States', 'flag': 'assets/flags/US.png'},
+    {'code': 'GH', 'name': 'Ghana', 'flag': 'assets/flags/GH.png'},
+    {'code': 'KE', 'name': 'Kenya', 'flag': 'assets/flags/KE.png'},
   ];
 
   @override
@@ -73,20 +73,36 @@ class _RegisterPageState extends State<RegisterPage> {
                   children: [
                     Expanded(
                       flex: 2,
-                      child: DropdownButton<String>(
-                        value: selectedCountryCode,
-                        isExpanded: true,
-                        items: countries.map((country) {
-                          return DropdownMenuItem(
-                            value: country['code'],
-                            child: Text(country['code']!),
-                          );
-                        }).toList(),
-                        onChanged: (val) {
-                          setState(() {
-                            selectedCountryCode = val!;
-                          });
-                        },
+                      child: Container(
+                        height: 55, // Match FormInput height approximately
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: selectedCountryCode,
+                            isExpanded: true,
+                            items: countries.map((country) {
+                              return DropdownMenuItem(
+                                value: country['code'],
+                                child: Image.asset(
+                                  country['flag']!,
+                                  width: 32,
+                                  height: 24,
+                                  fit: BoxFit.cover,
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              setState(() {
+                                selectedCountryCode = val!;
+                              });
+                            },
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 10),
