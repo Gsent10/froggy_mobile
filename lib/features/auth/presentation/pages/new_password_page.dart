@@ -66,12 +66,13 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                     const SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         context.read<AuthBloc>().add(
-                          ResetPasswordRequested(
-                            passwordController.text,
-                            confirmPasswordController.text,
-                          ),
-                        );
+                              ResetPasswordRequested(
+                                passwordController.text,
+                                confirmPasswordController.text,
+                              ),
+                            );
                       },
                       child: const Button(label: 'Reset Password'),
                     ),
