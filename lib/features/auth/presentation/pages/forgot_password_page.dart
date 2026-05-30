@@ -29,6 +29,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         }
       },
       child: Scaffold(
+        backgroundColor: kBgColor,
         body: Container(
           width: context.screenWidth,
           height: context.screenHeight,
