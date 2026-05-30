@@ -52,9 +52,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     const SizedBox(height: 30),
                     GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         context.read<AuthBloc>().add(
-                          ForgotPasswordRequested(emailController.text),
-                        );
+                              ForgotPasswordRequested(emailController.text),
+                            );
                       },
                       child: const Button(label: 'Send OTP'),
                     ),
