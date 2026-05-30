@@ -77,6 +77,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                         ),
                       ),
                       onCompleted: (pin) {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         final state = context.read<AuthBloc>().state;
                         context.read<AuthBloc>().add(
                           VerifyOtpRequested(
@@ -90,6 +91,7 @@ class _VerifyOtpPageState extends State<VerifyOtpPage> {
                     const SizedBox(height: 40),
                     GestureDetector(
                       onTap: () {
+                        FocusManager.instance.primaryFocus?.unfocus();
                         final state = context.read<AuthBloc>().state;
                         context.read<AuthBloc>().add(
                           VerifyOtpRequested(
