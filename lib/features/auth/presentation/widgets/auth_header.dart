@@ -2,10 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 
 class AuthHeader extends StatelessWidget {
+  final bool isFirstPage;
   final String label;
   final String? subtitle;
 
-  const AuthHeader({super.key, required this.label, this.subtitle});
+  const AuthHeader({
+    super.key,
+    required this.label,
+    this.subtitle,
+    this.isFirstPage = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,9 +19,11 @@ class AuthHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(height: context.screenHeight * kSpacingXL),
+        isFirstPage
+            ? SizedBox(height: context.screenHeight * kBarHeight)
+            : SizedBox(height: context.screenHeight * kSpacingXL),
 
-        if (Navigator.canPop(context))
+        if (!isFirstPage)
           Align(
             alignment: Alignment.centerLeft,
             child: IconButton(
