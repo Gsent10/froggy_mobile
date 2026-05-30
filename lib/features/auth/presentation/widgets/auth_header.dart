@@ -15,6 +15,20 @@ class AuthHeader extends StatelessWidget {
       children: [
         SizedBox(height: context.screenHeight * kBarHeight),
 
+        if (Navigator.canPop(context))
+          Align(
+            alignment: Alignment.centerLeft,
+            child: IconButton(
+              onPressed: () => Navigator.of(context).pop(),
+              icon: const Icon(Icons.arrow_back_ios_new, color: kBlackColor),
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(),
+            ),
+          ),
+
+        if (Navigator.canPop(context))
+          SizedBox(height: context.screenHeight * kSpacingM),
+
         // Title
         Text(
           label,
