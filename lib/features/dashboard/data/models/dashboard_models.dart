@@ -14,12 +14,22 @@ class DashboardData {
       wallets: (json['wallets'] as List? ?? [])
           .map((e) => Wallet.fromJson(e))
           .toList(),
-      activities: (json['activities'] as List? ?? [])
-          .map((e) => Activity.fromJson(e))
-          .toList(),
+      activities:
+          (json['recentTransactions'] as List? ??
+                  json['activities'] as List? ??
+                  [])
+              .map((e) => Activity.fromJson(e))
+              .toList(),
       userInfo: UserInfo.fromJson(json['customer'] ?? {}),
     );
   }
+}
+
+double _parseDouble(dynamic value) {
+  if (value == null) return 0.0;
+  if (value is num) return value.toDouble();
+  if (value is String) return double.tryParse(value) ?? 0.0;
+  return 0.0;
 }
 
 class Wallet {
@@ -42,7 +52,7 @@ class Wallet {
       id: json['id'] ?? 0,
       currencyCode: json['currency_code'] ?? 'NGN',
       currencySymbol: json['currency_symbol'] ?? '₦',
-      balance: (json['balance'] ?? 0).toDouble(),
+      balance: _parseDouble(json['balance']),
       cardNumber: json['card_number'],
     );
   }
@@ -68,11 +78,12 @@ class Activity {
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
       id: json['id'] ?? 0,
-      title: json['title'] ?? 'Unknown',
+      title:
+          json['title'] ?? json['remark'] ?? json['description'] ?? 'Unknown',
       subtitle: json['subtitle'] ?? '',
-      amount: (json['amount'] ?? 0).toDouble(),
-      date: json['date'] ?? '',
-      isCredit: json['is_credit'] ?? false,
+      amount: _parseDouble(json['amount']),
+      date: json['date'] ?? json['created_at'] ?? '',
+      isCredit: json['is_credit'] ?? (json['type'] == 'credit'),
     );
   }
 }
