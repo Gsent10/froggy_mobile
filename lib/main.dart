@@ -10,6 +10,8 @@ import 'package:froggy_mobile/features/auth/presentation/pages/verify_otp_page.d
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/topup/bloc/topup_bloc.dart';
 import 'package:froggy_mobile/features/topup/presentation/pages/topup_result_page.dart';
+import 'package:froggy_mobile/features/transfer/bloc/transfer_bloc.dart';
+import 'package:froggy_mobile/features/transfer/presentation/pages/transfer_result_page.dart';
 import 'package:froggy_mobile/features/wallet/bloc/wallet_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:froggy_mobile/features/topup/presentation/pages/topup_page.dart';
@@ -44,6 +46,7 @@ class MyApp extends StatelessWidget {
           create: (context) => DashboardBloc()..add(FetchDashboardData()),
         ),
         BlocProvider(create: (context) => WalletBloc()),
+        BlocProvider(create: (context) => TransferBloc()),
       ],
       child: MaterialApp(
         title: 'Froggy Mobile',
@@ -71,7 +74,11 @@ class MyApp extends StatelessWidget {
           '/new-password': (context) => const NewPasswordPage(),
           '/dashboard': (context) => const DashboardPage(),
           '/wallet-list': (context) => const WalletListPage(),
-          '/transfer': (context) => const TransferPage(),
+          '/transfer': (context) => BlocProvider(
+            create: (_) => TransferBloc(),
+            child: const TransferPage(),
+          ),
+          '/transfer-result': (context) => const TransferResultPage(),
           '/topup': (context) => BlocProvider(
             create: (_) => TopupBloc(),
             child: const TopupPage(),
