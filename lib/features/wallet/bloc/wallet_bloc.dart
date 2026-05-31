@@ -37,5 +37,43 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         },
       );
     });
+
+    on<CreateWallet>((event, emit) async {
+      emit(state.copyWith(createStatus: WalletCreateStatus.loading));
+
+      await _apiEndpoints.safeSendRequest(
+        request: (dio, headers) => dio.post(
+          ApiEndpoints.WALLETS,
+          data: {'currency_code': event.currencyCode},
+          options: Options(headers: headers),
+        ),
+        onSuccess: (data) {
+          final wallet = Wallet.fromJson(data['wallet'] ?? {});
+          emit(
+            state.copyWith(
+              createStatus: WalletCreateStatus.success,
+              createdWallet: wallet,
+            ),
+          );
+        },
+        onError: (error) {
+          emit(
+            state.copyWith(
+              createStatus: WalletCreateStatus.error,
+              createErrorMessage: error,
+            ),
+          );
+        },
+      );
+    });
+
+    on<ResetWalletCreateStatus>((event, emit) {
+      emit(
+        state.copyWith(
+          createStatus: WalletCreateStatus.idle,
+          createErrorMessage: null,
+        ),
+      );
+    });
   }
 }
