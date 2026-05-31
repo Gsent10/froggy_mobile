@@ -6,3 +6,5 @@ class TabChanged extends DashboardEvent {
   final int index;
   TabChanged(this.index);
 }
+
+class FetchDashboardData extends DashboardEvent {}
