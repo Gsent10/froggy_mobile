@@ -606,7 +606,20 @@ class _QuickActions extends StatelessWidget {
       children: actions.map((a) {
         return GestureDetector(
           onTap: () {
-            // TODO: route based on a.$2
+            switch (a.$2) {
+              case 'Wallets':
+                Navigator.pushNamed(context, '/wallet-list');
+                break;
+              case 'Transfer':
+                Navigator.pushNamed(context, '/transfer');
+                break;
+              case 'Top-up':
+                Navigator.pushNamed(context, '/topup');
+                break;
+              case 'Withdraw':
+                Navigator.pushNamed(context, '/withdraw');
+                break;
+            }
           },
           child: Column(
             mainAxisSize: MainAxisSize.min,
