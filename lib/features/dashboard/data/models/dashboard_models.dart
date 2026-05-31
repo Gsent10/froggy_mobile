@@ -37,7 +37,7 @@ class Wallet {
   final String currencyCode;
   final String currencySymbol;
   final double balance;
-  final String? cardNumber; // If available
+  final String? cardNumber;
 
   Wallet({
     required this.id,
@@ -48,10 +48,20 @@ class Wallet {
   });
 
   factory Wallet.fromJson(Map<String, dynamic> json) {
+    const currencySymbols = {
+      'GBP': '£',
+      'NGN': '₦',
+      'USD': '\$',
+      'GHS': 'GH₵',
+      'KES': 'KSh',
+    };
+
+    final code = json['currency_code'] ?? 'NGN';
+
     return Wallet(
       id: json['id'] ?? 0,
-      currencyCode: json['currency_code'] ?? 'NGN',
-      currencySymbol: json['currency_symbol'] ?? '₦',
+      currencyCode: code,
+      currencySymbol: currencySymbols[code] ?? '₦',
       balance: _parseDouble(json['balance']),
       cardNumber: json['card_number'],
     );
