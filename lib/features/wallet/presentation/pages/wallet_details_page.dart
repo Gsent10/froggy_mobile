@@ -232,7 +232,7 @@ class _ActivityTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                activity.title,
+                "",
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * kFontXS,
@@ -243,7 +243,7 @@ class _ActivityTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                activity.date,
+                "activity.date",
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * (kFontXS - 0.005),
