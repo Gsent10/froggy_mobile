@@ -52,27 +52,18 @@ class HomePage extends StatelessWidget {
                   children: [
                     SizedBox(height: context.screenHeight * kSpacingXL),
 
-                    // ── Top bar ──────────────────────────────────────────
                     _TopBar(userInfo: data.userInfo),
 
                     SizedBox(height: context.screenHeight * kSpacingM),
 
-                    // ── Balance card ─────────────────────────────────────
                     _BalanceCard(wallet: primaryWallet),
 
-                    SizedBox(height: context.screenHeight * kSpacingM),
+                    SizedBox(height: context.screenHeight * kSpacingL),
 
-                    // ── Quick actions ────────────────────────────────────
                     const _QuickActions(),
 
                     SizedBox(height: context.screenHeight * kSpacingM),
 
-                    // ── Loan banner ──────────────────────────────────────
-                    const _LoanBanner(),
-
-                    SizedBox(height: context.screenHeight * kSpacingL),
-
-                    // ── Recent transactions ──────────────────────────────
                     _SectionHeader(
                       title: 'Recent transactions',
                       actionLabel: 'View all',
@@ -116,52 +107,6 @@ class HomePage extends StatelessWidget {
                           );
                         },
                       ),
-
-                    SizedBox(height: context.screenHeight * kSpacingL),
-
-                    // ── Do more ──────────────────────────────────────────
-                    Text(
-                      'Do more with FairMoney',
-                      style: SafeGoogleFont(
-                        'DM Sans',
-                        fontSize: context.screenWidth * kFontS,
-                        fontWeight: FontWeight.w600,
-                        color: kBlackColor,
-                      ),
-                    ),
-
-                    SizedBox(height: context.screenHeight * kSpacingM),
-
-                    // Horizontally scrollable promo cards
-                    SizedBox(
-                      height: context.screenHeight * 0.14,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
-                        padding: EdgeInsets.only(
-                          right: context.screenWidth * kHorizontalPadding,
-                        ),
-                        children: const [
-                          _PromoCard(
-                            color: Color(0xff1E7C47),
-                            emoji: '💰',
-                            line1: 'Get a loan in 5',
-                            line2: 'minutes!',
-                          ),
-                          _PromoCard(
-                            color: kPrimaryColor,
-                            emoji: '📱',
-                            line1: 'Bank with your',
-                            line2: 'phone number',
-                          ),
-                          _PromoCard(
-                            color: Color(0xff0D9488),
-                            emoji: '📈',
-                            line1: 'Up to 23%',
-                            line2: 'on savings',
-                          ),
-                        ],
-                      ),
-                    ),
 
                     SizedBox(height: context.screenHeight * kSpacingM),
                   ],
@@ -408,87 +353,6 @@ class _QuickActions extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Loan Banner
-// ─────────────────────────────────────────────────────────────────────────────
-class _LoanBanner extends StatelessWidget {
-  const _LoanBanner();
-
-  @override
-  Widget build(BuildContext context) {
-    final sw = context.screenWidth;
-    final sh = context.screenHeight;
-
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        horizontal: sw * 0.04,
-        vertical: sh * 0.018,
-      ),
-      decoration: BoxDecoration(
-        color: const Color(0xffEDF7F1),
-        borderRadius: BorderRadius.circular(sw * 0.035),
-        border: Border.all(color: const Color(0xffC3E8D3)),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Get a loan in 5 minutes! 💸',
-                  style: SafeGoogleFont(
-                    'DM Sans',
-                    fontSize: sw * kFontXS,
-                    fontWeight: FontWeight.w700,
-                    color: kBlackColor,
-                  ),
-                ),
-                SizedBox(height: sh * 0.004),
-                Text(
-                  'Up to ₦50,000 available',
-                  style: SafeGoogleFont(
-                    'DM Sans',
-                    fontSize: sw * (kFontXS - 0.005),
-                    color: kSecondaryColor,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              // TODO: navigate to loan screen
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: kBlackColor,
-              foregroundColor: kWhiteColor,
-              padding: EdgeInsets.symmetric(
-                horizontal: sw * 0.04,
-                vertical: sh * 0.012,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(sw * 0.025),
-              ),
-              elevation: 0,
-            ),
-            child: Text(
-              'Get loan',
-              style: SafeGoogleFont(
-                'DM Sans',
-                fontSize: sw * kFontXS,
-                fontWeight: FontWeight.w600,
-                color: kWhiteColor,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
 // Section Header
 // ─────────────────────────────────────────────────────────────────────────────
 class _SectionHeader extends StatelessWidget {
@@ -647,73 +511,6 @@ class _ActivityTile extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Promo Card  (static content — update if you add promo data to your API)
-// ─────────────────────────────────────────────────────────────────────────────
-class _PromoCard extends StatelessWidget {
-  const _PromoCard({
-    required this.color,
-    required this.emoji,
-    required this.line1,
-    required this.line2,
-  });
-
-  final Color color;
-  final String emoji;
-  final String line1;
-  final String line2;
-
-  @override
-  Widget build(BuildContext context) {
-    final sw = context.screenWidth;
-
-    return GestureDetector(
-      onTap: () {
-        // TODO: route based on card type
-      },
-      child: Container(
-        width: sw * 0.38,
-        margin: EdgeInsets.only(right: sw * 0.03),
-        padding: EdgeInsets.all(sw * 0.035),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(sw * 0.04),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(emoji, style: TextStyle(fontSize: sw * 0.055)),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  line1,
-                  style: SafeGoogleFont(
-                    'DM Sans',
-                    fontSize: sw * (kFontXS - 0.002),
-                    fontWeight: FontWeight.w700,
-                    color: kWhiteColor,
-                  ),
-                ),
-                Text(
-                  line2,
-                  style: SafeGoogleFont(
-                    'DM Sans',
-                    fontSize: sw * (kFontXS - 0.002),
-                    fontWeight: FontWeight.w700,
-                    color: kWhiteColor,
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
