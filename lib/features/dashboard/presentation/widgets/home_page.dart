@@ -71,7 +71,65 @@ class HomePage extends StatelessWidget {
         builder: (context, state) {
           if (state.status == DashboardStatus.error) {
             return Center(
-              child: Text(state.errorMessage ?? 'An error occurred'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.cloud_off_rounded,
+                    size: context.screenWidth * 0.15,
+                    color: kSecondaryColor,
+                  ),
+                  SizedBox(height: context.screenHeight * kSpacingM),
+                  Text(
+                    'Request failed',
+                    style: SafeGoogleFont(
+                      'DM Sans',
+                      fontSize: context.screenWidth * kFontS,
+                      fontWeight: FontWeight.w600,
+                      color: kBlackColor,
+                    ),
+                  ),
+                  SizedBox(height: context.screenHeight * kSpacingS),
+                  Text(
+                    'Something went wrong.\nPlease try again.',
+                    textAlign: TextAlign.center,
+                    style: SafeGoogleFont(
+                      'DM Sans',
+                      fontSize: context.screenWidth * (kFontXS - 0.005),
+                      color: kSecondaryColor,
+                      height: 1.5,
+                    ),
+                  ),
+                  SizedBox(height: context.screenHeight * kSpacingL),
+                  ElevatedButton(
+                    onPressed: () =>
+                        context.read<DashboardBloc>().add(FetchDashboardData()),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kPrimaryColor,
+                      foregroundColor: kWhiteColor,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: context.screenWidth * 0.1,
+                        vertical: context.screenHeight * 0.016,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(
+                          context.screenWidth * 0.03,
+                        ),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'Try again',
+                      style: SafeGoogleFont(
+                        'DM Sans',
+                        fontSize: context.screenWidth * kFontXS,
+                        fontWeight: FontWeight.w600,
+                        color: kWhiteColor,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             );
           }
 
@@ -512,7 +570,7 @@ class _SingleWalletCard extends StatelessWidget {
                   'Wallet details',
                   style: SafeGoogleFont(
                     'DM Sans',
-                    fontSize: sw * 0.05,
+                    fontSize: sw * kFontS,
                     color: kWhiteColor,
                     fontWeight: FontWeight.w600,
                     decoration: TextDecoration.underline,
