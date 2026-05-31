@@ -487,7 +487,7 @@ class _SingleWalletCard extends StatelessWidget {
               ),
 
               Text(
-                'Account balance',
+                'Wallet balance',
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * kFontXS,
@@ -500,10 +500,10 @@ class _SingleWalletCard extends StatelessWidget {
 
               GestureDetector(
                 onTap: () {
-                  // TODO: navigate to account details
+                  // TODO: navigate to wallet details
                 },
                 child: Text(
-                  'Account details',
+                  'Wallet details',
                   style: SafeGoogleFont(
                     'DM Sans',
                     fontSize: sw * kFontXS,
