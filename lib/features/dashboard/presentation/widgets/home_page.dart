@@ -641,11 +641,8 @@ class _QuickActions extends StatelessWidget {
               case 'Transfer':
                 Navigator.pushNamed(context, '/transfer');
                 break;
-              case 'Top-up':
+              case 'Add money':
                 Navigator.pushNamed(context, '/topup');
-                break;
-              case 'Withdraw':
-                Navigator.pushNamed(context, '/withdraw');
                 break;
             }
           },
