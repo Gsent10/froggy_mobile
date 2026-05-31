@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/data/models/dashboard_models.dart';
+import 'package:froggy_mobile/features/wallet/presentation/pages/wallet_details_page.dart';
 
 class _WalletTheme {
   final Color cardColor;
@@ -500,13 +501,19 @@ class _SingleWalletCard extends StatelessWidget {
 
               GestureDetector(
                 onTap: () {
-                  // TODO: navigate to wallet details
+                  if (wallet != null) {
+                    Navigator.pushNamed(
+                      context,
+                      '/wallet-details',
+                      arguments: wallet!.id,
+                    );
+                  }
                 },
                 child: Text(
                   'Wallet details',
                   style: SafeGoogleFont(
                     'DM Sans',
-                    fontSize: sw * kFontXS,
+                    fontSize: sw * 0.05,
                     color: kWhiteColor,
                     fontWeight: FontWeight.w600,
                     decoration: TextDecoration.underline,
