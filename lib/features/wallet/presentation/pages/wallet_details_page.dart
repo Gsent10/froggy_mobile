@@ -4,6 +4,7 @@ import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/core/widgets/loading.dart';
 import 'package:froggy_mobile/features/wallet/bloc/wallet_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/data/models/dashboard_models.dart';
+import 'package:froggy_mobile/features/wallet/presentation/widgets/wallet_card.dart';
 
 class WalletDetailsPage extends StatefulWidget {
   final int walletId;
@@ -86,9 +87,11 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               SizedBox(height: sh * 0.02),
-                              _LargeWalletCard(
+                              WalletCard(
+                                cardWidth: sw,
+                                cardHeight: sh * 0.22,
                                 wallet: state.wallet!,
-                                formatAmount: _formatAmount,
+                                theme: themeFor(state.wallet!.currencyCode),
                               ),
                               SizedBox(height: sh * 0.04),
                               Text(
@@ -186,92 +189,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
           ],
         );
       },
-    );
-  }
-}
-
-class _LargeWalletCard extends StatelessWidget {
-  final Wallet wallet;
-  final String Function(double) formatAmount;
-
-  const _LargeWalletCard({required this.wallet, required this.formatAmount});
-
-  @override
-  Widget build(BuildContext context) {
-    final sw = context.screenWidth;
-    final sh = context.screenHeight;
-
-    return Container(
-      width: double.infinity,
-      height: sh * 0.25,
-      padding: EdgeInsets.all(sw * 0.07),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(sw * 0.06),
-        gradient: const LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [Color(0xff1443C3), Color(0xff0A235C)],
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: const Color(0xff1443C3).withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                'Balance',
-                style: SafeGoogleFont(
-                  'DM Sans',
-                  fontSize: sw * kFontXS,
-                  color: Colors.white70,
-                ),
-              ),
-              const Icon(Icons.info_outline, color: Colors.white70),
-            ],
-          ),
-          Text(
-            '${wallet.currencySymbol}${formatAmount(wallet.balance)}',
-            style: SafeGoogleFont(
-              'DM Sans',
-              fontSize: sw * 0.09,
-              fontWeight: FontWeight.w700,
-              color: kWhiteColor,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                wallet.cardNumber ?? '**** **** **** 1234',
-                style: SafeGoogleFont(
-                  'DM Sans',
-                  fontSize: sw * kFontXS,
-                  color: Colors.white70,
-                  letterSpacing: 1.5,
-                ),
-              ),
-              Text(
-                wallet.currencyCode,
-                style: SafeGoogleFont(
-                  'DM Sans',
-                  fontSize: sw * kFontXS,
-                  fontWeight: FontWeight.w700,
-                  color: kWhiteColor,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
