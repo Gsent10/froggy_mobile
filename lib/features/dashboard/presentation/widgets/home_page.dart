@@ -142,9 +142,6 @@ class HomePage extends StatelessWidget {
           }
 
           final data = state.data!;
-          final primaryWallet = data.wallets.isNotEmpty
-              ? data.wallets.first
-              : null;
           final recentActivities = data.activities.take(5).toList();
 
           return RefreshIndicator(
@@ -238,7 +235,6 @@ class HomePage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return _ActivityTile(
                             activity: recentActivities[index],
-                            wallet: primaryWallet,
                           );
                         },
                       ),
@@ -253,8 +249,6 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-// ─── Top bar ────────────────────────────────────────────────────────────────
 
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.userInfo});
@@ -318,8 +312,6 @@ class _TopBar extends StatelessWidget {
     );
   }
 }
-
-// ─── Balance card ────────────────────────────────────────────────────────────
 
 class _BalanceCard extends StatefulWidget {
   const _BalanceCard({required this.wallets});
@@ -462,8 +454,6 @@ class _BalanceCardState extends State<_BalanceCard> {
     );
   }
 }
-
-// ─── Single wallet card ───────────────────────────────────────────────────────
 
 class _SingleWalletCard extends StatelessWidget {
   const _SingleWalletCard({
@@ -612,8 +602,6 @@ class _SingleWalletCard extends StatelessWidget {
   }
 }
 
-// ─── Quick actions ───────────────────────────────────────────────────────────
-
 class _QuickActions extends StatelessWidget {
   const _QuickActions();
 
@@ -676,8 +664,6 @@ class _QuickActions extends StatelessWidget {
   }
 }
 
-// ─── Section header ──────────────────────────────────────────────────────────
-
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({
     required this.title,
@@ -723,10 +709,9 @@ class _SectionHeader extends StatelessWidget {
 }
 
 class _ActivityTile extends StatelessWidget {
-  const _ActivityTile({required this.activity, required this.wallet});
+  const _ActivityTile({required this.activity});
 
   final Activity activity;
-  final Wallet? wallet;
 
   String _formatAmount(double amount) {
     final parts = amount.toStringAsFixed(2).split('.');
@@ -735,6 +720,17 @@ class _ActivityTile extends StatelessWidget {
       (m) => '${m[0]},',
     );
     return '$intPart.${parts[1]}';
+  }
+
+  String get _currencySymbol {
+    const currencySymbols = {
+      'GBP': '£',
+      'NGN': '₦',
+      'USD': '\$',
+      'GHS': 'GH₵',
+      'KES': 'KSh',
+    };
+    return currencySymbols[activity.currencyCode] ?? '₦';
   }
 
   String get _title {
@@ -818,7 +814,6 @@ class _ActivityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final sw = context.screenWidth;
     final sh = context.screenHeight;
-    final symbol = wallet?.currencySymbol ?? '₦';
     final isCredit = activity.isCredit;
 
     return Row(
@@ -872,7 +867,7 @@ class _ActivityTile extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             Text(
-              '${isCredit ? '+' : '-'}$symbol${_formatAmount(activity.amount)}',
+              '${isCredit ? '+' : '-'}$_currencySymbol${_formatAmount(activity.amount)}',
               style: SafeGoogleFont(
                 'DM Sans',
                 fontSize: sw * kFontXS,
