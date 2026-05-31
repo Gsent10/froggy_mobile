@@ -173,7 +173,6 @@ class HomePage extends StatelessWidget {
                         actionLabel: 'View all',
                         onTap: () {},
                       ),
-                    SizedBox(height: context.screenHeight * kSpacingS),
                     if (recentActivities.isEmpty)
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -722,8 +721,6 @@ class _SectionHeader extends StatelessWidget {
     );
   }
 }
-
-// ─── Activity tile ───────────────────────────────────────────────────────────
 
 class _ActivityTile extends StatelessWidget {
   const _ActivityTile({required this.activity, required this.wallet});
