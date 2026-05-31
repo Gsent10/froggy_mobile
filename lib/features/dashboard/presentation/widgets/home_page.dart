@@ -175,9 +175,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Top Bar
-// ─────────────────────────────────────────────────────────────────────────────
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.userInfo});
 
@@ -226,7 +223,7 @@ class _TopBar extends StatelessWidget {
         const Spacer(),
         GestureDetector(
           onTap: () {
-            // TODO: navigate to notifications / history
+            // TODO: navigate to recent activity screen
           },
           child: Icon(
             Icons.history_rounded,
