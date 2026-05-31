@@ -4,6 +4,68 @@ import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/data/models/dashboard_models.dart';
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Wallet card theming by currency code
+// ─────────────────────────────────────────────────────────────────────────────
+class _WalletTheme {
+  final Color cardColor;
+  final Color accentColor;
+  final String flagAsset;
+  final String countryName;
+
+  const _WalletTheme({
+    required this.cardColor,
+    required this.accentColor,
+    required this.flagAsset,
+    required this.countryName,
+  });
+}
+
+const _walletThemes = <String, _WalletTheme>{
+  'GBP': _WalletTheme(
+    cardColor: Color(0xff003078),
+    accentColor: Color(0xffCF142B),
+    flagAsset: 'assets/flags/GB.png',
+    countryName: 'United Kingdom',
+  ),
+  'NGN': _WalletTheme(
+    cardColor: Color(0xff1E7C47),
+    accentColor: Color(0xffA8E6C3),
+    flagAsset: 'assets/flags/NG.png',
+    countryName: 'Nigeria',
+  ),
+  'USD': _WalletTheme(
+    cardColor: Color(0xff1A3A5C),
+    accentColor: Color(0xffB22234),
+    flagAsset: 'assets/flags/US.png',
+    countryName: 'United States',
+  ),
+  'GHS': _WalletTheme(
+    cardColor: Color(0xff8B0000),
+    accentColor: Color(0xffFCD116),
+    flagAsset: 'assets/flags/GH.png',
+    countryName: 'Ghana',
+  ),
+  'KES': _WalletTheme(
+    cardColor: Color(0xff1a1a1a),
+    accentColor: Color(0xffBB0000),
+    flagAsset: 'assets/flags/KE.png',
+    countryName: 'Kenya',
+  ),
+};
+
+_WalletTheme _themeFor(String currencyCode) =>
+    _walletThemes[currencyCode.toUpperCase()] ??
+    const _WalletTheme(
+      cardColor: Color(0xff1a1a1a),
+      accentColor: Color(0xff444444),
+      flagAsset: 'assets/flags/NG.png',
+      countryName: 'Unknown',
+    );
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Home Page
+// ─────────────────────────────────────────────────────────────────────────────
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -28,13 +90,9 @@ class HomePage extends StatelessWidget {
           }
 
           final data = state.data!;
-
-          // Use the first wallet as the primary balance, fall back gracefully
           final primaryWallet = data.wallets.isNotEmpty
               ? data.wallets.first
               : null;
-
-          // Show only the 5 most-recent activities on the home page
           final recentActivities = data.activities.take(5).toList();
 
           return RefreshIndicator(
@@ -52,18 +110,22 @@ class HomePage extends StatelessWidget {
                   children: [
                     SizedBox(height: context.screenHeight * kSpacingXL),
 
+                    // ── Top bar ──────────────────────────────────────────
                     _TopBar(userInfo: data.userInfo),
 
                     SizedBox(height: context.screenHeight * kSpacingM),
 
-                    _BalanceCard(wallet: primaryWallet),
+                    // ── Balance card(s) ──────────────────────────────────
+                    _BalanceCard(wallets: data.wallets),
 
                     SizedBox(height: context.screenHeight * kSpacingL),
 
+                    // ── Quick actions ────────────────────────────────────
                     const _QuickActions(),
 
                     SizedBox(height: context.screenHeight * kSpacingL),
 
+                    // ── Recent transactions header (hidden when empty) ───
                     if (recentActivities.isNotEmpty)
                       _SectionHeader(
                         title: 'Recent transactions',
@@ -75,6 +137,7 @@ class HomePage extends StatelessWidget {
 
                     SizedBox(height: context.screenHeight * kSpacingS),
 
+                    // ── Transactions list or empty state ─────────────────
                     if (recentActivities.isEmpty)
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -87,8 +150,8 @@ class HomePage extends StatelessWidget {
                               Container(
                                 width: context.screenWidth * 0.18,
                                 height: context.screenWidth * 0.18,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xffF2F4F8),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xffF2F4F8),
                                   shape: BoxShape.circle,
                                 ),
                                 child: Icon(
@@ -157,6 +220,9 @@ class HomePage extends StatelessWidget {
   }
 }
 
+// ─────────────────────────────────────────────────────────────────────────────
+// Top Bar
+// ─────────────────────────────────────────────────────────────────────────────
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.userInfo});
 
@@ -171,11 +237,16 @@ class _TopBar extends StatelessWidget {
         CircleAvatar(
           radius: sw * 0.045,
           backgroundColor: const Color(0xffE8EDF8),
-          child: Icon(
-            Icons.person_outline_rounded,
-            size: sw * 0.05,
-            color: kPrimaryColor,
-          ),
+          backgroundImage: userInfo.profileImage != null
+              ? NetworkImage(userInfo.profileImage!)
+              : null,
+          child: userInfo.profileImage == null
+              ? Icon(
+                  Icons.person_outline_rounded,
+                  size: sw * 0.05,
+                  color: kPrimaryColor,
+                )
+              : null,
         ),
         SizedBox(width: sw * 0.03),
         Column(
@@ -191,7 +262,6 @@ class _TopBar extends StatelessWidget {
               ),
             ),
             Text(
-              // Show first name only to keep the header compact
               userInfo.fullName.split(' ').first,
               style: SafeGoogleFont(
                 'DM Sans',
@@ -219,21 +289,37 @@ class _TopBar extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// Balance Card  (StatefulWidget — owns the show/hide toggle locally)
+// Balance Card — horizontally scrollable, one card per wallet
 // ─────────────────────────────────────────────────────────────────────────────
 class _BalanceCard extends StatefulWidget {
-  const _BalanceCard({required this.wallet});
+  const _BalanceCard({required this.wallets});
 
-  final Wallet? wallet;
+  final List<Wallet> wallets;
 
   @override
   State<_BalanceCard> createState() => _BalanceCardState();
 }
 
 class _BalanceCardState extends State<_BalanceCard> {
-  bool _visible = false;
+  late final List<ValueNotifier<bool>> _visibilityNotifiers;
 
-  /// Format a double like 50000.0 → "50,000.00"
+  @override
+  void initState() {
+    super.initState();
+    _visibilityNotifiers = List.generate(
+      widget.wallets.isEmpty ? 1 : widget.wallets.length,
+      (_) => ValueNotifier(false),
+    );
+  }
+
+  @override
+  void dispose() {
+    for (final n in _visibilityNotifiers) {
+      n.dispose();
+    }
+    super.dispose();
+  }
+
   String _formatAmount(double amount) {
     final parts = amount.toStringAsFixed(2).split('.');
     final intPart = parts[0].replaceAllMapped(
@@ -247,30 +333,170 @@ class _BalanceCardState extends State<_BalanceCard> {
   Widget build(BuildContext context) {
     final sw = context.screenWidth;
     final sh = context.screenHeight;
+    final cardHeight = sh * 0.20;
 
-    final symbol = widget.wallet?.currencySymbol ?? '₦';
-    final balance = widget.wallet?.balance ?? 0.0;
-    final maskedCard = widget.wallet?.cardNumber != null
-        ? '•••• ${widget.wallet!.cardNumber!.substring(widget.wallet!.cardNumber!.length - 4)}'
-        : null;
+    if (widget.wallets.isEmpty) {
+      return SizedBox(
+        height: cardHeight,
+        child: _SingleWalletCard(
+          cardWidth: sw,
+          cardHeight: cardHeight,
+          wallet: null,
+          theme: _themeFor('NGN'),
+          visibilityNotifier: _visibilityNotifiers.first,
+          formatAmount: _formatAmount,
+        ),
+      );
+    }
 
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(sw * 0.05),
-      decoration: BoxDecoration(
-        color: kBlackColor,
-        borderRadius: BorderRadius.circular(sw * 0.04),
+    // One wallet — full width, fixed height, no scroll chrome
+    if (widget.wallets.length == 1) {
+      return SizedBox(
+        height: cardHeight,
+        child: _SingleWalletCard(
+          cardWidth: sw,
+          cardHeight: cardHeight,
+          wallet: widget.wallets.first,
+          theme: _themeFor(widget.wallets.first.currencyCode),
+          visibilityNotifier: _visibilityNotifiers.first,
+          formatAmount: _formatAmount,
+        ),
+      );
+    }
+
+    return SizedBox(
+      height: cardHeight,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        // Negative margin trick: allow cards to bleed past the
+        // parent padding so the peek is visible, without Clip.none.
+        child: Row(
+          children: [
+            for (int i = 0; i < widget.wallets.length; i++) ...[
+              _SingleWalletCard(
+                cardWidth: sw * 0.88,
+                cardHeight: cardHeight,
+                wallet: widget.wallets[i],
+                theme: _themeFor(widget.wallets[i].currencyCode),
+                visibilityNotifier: _visibilityNotifiers[i],
+                formatAmount: _formatAmount,
+              ),
+              if (i < widget.wallets.length - 1) SizedBox(width: sw * 0.03),
+            ],
+          ],
+        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    );
+  }
+}
+
+class _SingleWalletCard extends StatelessWidget {
+  const _SingleWalletCard({
+    required this.cardWidth,
+    required this.cardHeight,
+    required this.wallet,
+    required this.theme,
+    required this.visibilityNotifier,
+    required this.formatAmount,
+  });
+
+  final double cardWidth;
+  final double cardHeight;
+  final Wallet? wallet;
+  final _WalletTheme theme;
+  final ValueNotifier<bool> visibilityNotifier;
+  final String Function(double) formatAmount;
+
+  @override
+  Widget build(BuildContext context) {
+    final sw = cardWidth;
+    final sh = cardHeight;
+
+    final symbol = wallet?.currencySymbol ?? '₦';
+    final balance = wallet?.balance ?? 0.0;
+
+    return ValueListenableBuilder<bool>(
+      valueListenable: visibilityNotifier,
+      builder: (context, visible, _) {
+        return Container(
+          width: sw,
+          height: sh,
+          padding: EdgeInsets.symmetric(
+            horizontal: sw * 0.055,
+            vertical: sw * 0.045,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(sw * 0.045),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.cardColor,
+                Color.lerp(theme.cardColor, Colors.black, 0.3)!,
+              ],
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            // mainAxisSize must NOT be min — we want the column to fill
+            // the fixed height so spacing is distributed correctly.
+            mainAxisSize: MainAxisSize.max,
             children: [
+              // ── Flag + country name | eye toggle ────────────────────
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(sw * 0.01),
+                        child: Image.asset(
+                          theme.flagAsset,
+                          width: sw * 0.07,
+                          height: sw * 0.045,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            width: sw * 0.07,
+                            height: sw * 0.045,
+                            decoration: BoxDecoration(
+                              color: theme.accentColor.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(sw * 0.01),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: sw * 0.025),
+                      Text(
+                        theme.countryName,
+                        style: SafeGoogleFont(
+                          'DM Sans',
+                          fontSize: sw * (kFontXS - 0.005),
+                          color: Colors.white60,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GestureDetector(
+                    onTap: () =>
+                        visibilityNotifier.value = !visibilityNotifier.value,
+                    child: Icon(
+                      visible
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: Colors.white60,
+                      size: sw * 0.065,
+                    ),
+                  ),
+                ],
+              ),
+
+              // Fixed gap instead of Spacer — no unbounded height risk
+              SizedBox(height: sh * 0.12),
+
+              // ── Balance ──────────────────────────────────────────────
               Text(
-                _visible
-                    ? '$symbol${_formatAmount(balance)}'
-                    : '$symbol ••••••',
+                visible ? '$symbol${formatAmount(balance)}' : '$symbol ••••••',
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * kFontL,
@@ -278,65 +504,43 @@ class _BalanceCardState extends State<_BalanceCard> {
                   color: kWhiteColor,
                 ),
               ),
-              GestureDetector(
-                onTap: () => setState(() => _visible = !_visible),
-                child: Icon(
-                  _visible
-                      ? Icons.visibility_outlined
-                      : Icons.visibility_off_outlined,
+
+              Text(
+                'Account balance',
+                style: SafeGoogleFont(
+                  'DM Sans',
+                  fontSize: sw * kFontXS,
                   color: Colors.white60,
-                  size: sw * 0.055,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+
+              SizedBox(height: sh * 0.07),
+
+              GestureDetector(
+                onTap: () {
+                  // TODO: navigate to account details
+                },
+                child: Text(
+                  'Account details',
+                  style: SafeGoogleFont(
+                    'DM Sans',
+                    fontSize: sw * kFontXS,
+                    color: kWhiteColor,
+                    fontWeight: FontWeight.w600,
+                    decoration: TextDecoration.underline,
+                    decorationColor: kWhiteColor,
+                  ),
                 ),
               ),
             ],
           ),
-          SizedBox(height: sh * 0.005),
-          Text(
-            'Account balance',
-            style: SafeGoogleFont(
-              'DM Sans',
-              fontSize: sw * kFontXS,
-              color: Colors.white60,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          if (maskedCard != null) ...[
-            SizedBox(height: sh * 0.006),
-            Text(
-              maskedCard,
-              style: SafeGoogleFont(
-                'DM Sans',
-                fontSize: sw * (kFontXS - 0.005),
-                color: Colors.white38,
-              ),
-            ),
-          ],
-          SizedBox(height: sh * 0.012),
-          GestureDetector(
-            onTap: () {
-              // TODO: navigate to account details
-            },
-            child: Text(
-              'Account details',
-              style: SafeGoogleFont(
-                'DM Sans',
-                fontSize: sw * kFontXS,
-                color: kWhiteColor,
-                fontWeight: FontWeight.w600,
-                decoration: TextDecoration.underline,
-                decorationColor: kWhiteColor,
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Quick Actions
-// ─────────────────────────────────────────────────────────────────────────────
 class _QuickActions extends StatelessWidget {
   const _QuickActions();
 
@@ -389,9 +593,6 @@ class _QuickActions extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Section Header
-// ─────────────────────────────────────────────────────────────────────────────
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({
     required this.title,
@@ -436,16 +637,12 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Activity Tile  (maps directly to your Activity model)
-// ─────────────────────────────────────────────────────────────────────────────
 class _ActivityTile extends StatelessWidget {
   const _ActivityTile({required this.activity, required this.wallet});
 
   final Activity activity;
   final Wallet? wallet;
 
-  /// Format double → "10,500,800.00"
   String _formatAmount(double amount) {
     final parts = amount.toStringAsFixed(2).split('.');
     final intPart = parts[0].replaceAllMapped(
@@ -531,7 +728,6 @@ class _ActivityTile extends StatelessWidget {
               ),
             ),
             SizedBox(height: sh * 0.003),
-            // Green check badge (always shown; remove if you add a status field)
             Container(
               width: sw * 0.04,
               height: sw * 0.04,
