@@ -168,7 +168,9 @@ class HomePage extends StatelessWidget {
                       _SectionHeader(
                         title: 'Recent transactions',
                         actionLabel: 'View all',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(context, '/transactions');
+                        },
                       ),
                     if (recentActivities.isEmpty)
                       Padding(
@@ -301,7 +303,7 @@ class _TopBar extends StatelessWidget {
         ),
         const Spacer(),
         GestureDetector(
-          onTap: () {},
+          onTap: () => Navigator.pushNamed(context, '/activity'),
           child: Icon(
             Icons.history_rounded,
             size: sw * 0.06,
