@@ -65,16 +65,12 @@ class WalletCard extends StatelessWidget {
     required this.cardHeight,
     required this.wallet,
     required this.theme,
-    required this.visibilityNotifier,
-    this.showDetailsLink = true,
   });
 
   final double cardWidth;
   final double cardHeight;
   final Wallet? wallet;
   final WalletTheme theme;
-  final ValueNotifier<bool> visibilityNotifier;
-  final bool showDetailsLink;
 
   String _formatAmount(double amount) {
     final parts = amount.toStringAsFixed(2).split('.');
@@ -91,85 +87,70 @@ class WalletCard extends StatelessWidget {
     final sh = cardHeight;
 
     final symbol = wallet?.currencySymbol ?? '₦';
+    final code = wallet?.currencyCode ?? 'NGN';
     final balance = wallet?.balance ?? 0.0;
 
-    return ValueListenableBuilder<bool>(
-      valueListenable: visibilityNotifier,
-      builder: (context, visible, _) {
-        return Container(
-          width: sw,
-          height: sh,
-          padding: EdgeInsets.symmetric(
-            horizontal: sw * 0.055,
-            vertical: sw * 0.045,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(sw * 0.045),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                theme.cardColor,
-                Color.lerp(theme.cardColor, Colors.black, 0.3)!,
-              ],
-            ),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+    return Container(
+      width: sw,
+      height: sh,
+      padding: EdgeInsets.symmetric(
+        horizontal: sw * 0.055,
+        vertical: sw * 0.045,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(sw * 0.045),
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            theme.cardColor,
+            Color.lerp(theme.cardColor, Colors.black, 0.3)!,
+          ],
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          Row(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(sw * 0.01),
-                        child: Image.asset(
-                          theme.flagAsset,
-                          width: sw * 0.07,
-                          height: sw * 0.045,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            width: sw * 0.07,
-                            height: sw * 0.045,
-                            decoration: BoxDecoration(
-                              color: theme.accentColor.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(sw * 0.01),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(width: sw * 0.025),
-                      Text(
-                        theme.countryName,
-                        style: SafeGoogleFont(
-                          'DM Sans',
-                          fontSize: sw * (kFontXS - 0.005),
-                          color: Colors.white60,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () =>
-                        visibilityNotifier.value = !visibilityNotifier.value,
-                    child: Icon(
-                      visible
-                          ? Icons.visibility_outlined
-                          : Icons.visibility_off_outlined,
-                      color: Colors.white60,
-                      size: sw * 0.065,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(sw * 0.01),
+                child: Image.asset(
+                  theme.flagAsset,
+                  width: sw * 0.07,
+                  height: sw * 0.045,
+                  fit: BoxFit.cover,
+                  errorBuilder: (_, __, ___) => Container(
+                    width: sw * 0.07,
+                    height: sw * 0.045,
+                    decoration: BoxDecoration(
+                      color: theme.accentColor.withOpacity(0.3),
+                      borderRadius: BorderRadius.circular(sw * 0.01),
                     ),
                   ),
-                ],
+                ),
               ),
-
-              SizedBox(height: sh * 0.12),
-
+              SizedBox(width: sw * 0.025),
               Text(
-                visible ? '$symbol${_formatAmount(balance)}' : '$symbol ••••••',
+                theme.countryName,
+                style: SafeGoogleFont(
+                  'DM Sans',
+                  fontSize: sw * (kFontXS - 0.005),
+                  color: Colors.white60,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '$symbol${_formatAmount(balance)}',
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * kFontL,
@@ -187,36 +168,34 @@ class WalletCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-
-              if (showDetailsLink) ...[
-                SizedBox(height: sh * 0.07),
-                GestureDetector(
-                  onTap: () {
-                    if (wallet != null) {
-                      Navigator.pushNamed(
-                        context,
-                        '/wallet-details',
-                        arguments: wallet!.id,
-                      );
-                    }
-                  },
-                  child: Text(
-                    'Wallet details',
-                    style: SafeGoogleFont(
-                      'DM Sans',
-                      fontSize: sw * kFontS,
-                      color: kWhiteColor,
-                      fontWeight: FontWeight.w600,
-                      decoration: TextDecoration.underline,
-                      decorationColor: kWhiteColor,
-                    ),
-                  ),
-                ),
-              ],
             ],
           ),
-        );
-      },
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '**** **** **** ****',
+                style: SafeGoogleFont(
+                  'DM Sans',
+                  fontSize: sw * kFontXS,
+                  color: Colors.white70,
+                  letterSpacing: 1.5,
+                ),
+              ),
+              Text(
+                code,
+                style: SafeGoogleFont(
+                  'DM Sans',
+                  fontSize: sw * kFontXS,
+                  fontWeight: FontWeight.w700,
+                  color: kWhiteColor,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
