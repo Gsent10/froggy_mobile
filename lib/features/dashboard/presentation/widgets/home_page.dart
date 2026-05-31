@@ -69,18 +69,18 @@ class HomePage extends StatelessWidget {
       backgroundColor: kBgColor,
       body: BlocBuilder<DashboardBloc, DashboardState>(
         builder: (context, state) {
-          if (state.status == DashboardStatus.loading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           if (state.status == DashboardStatus.error) {
             return Center(
               child: Text(state.errorMessage ?? 'An error occurred'),
             );
           }
 
-          if (state.data == null) {
+          if (state.data == null && state.status != DashboardStatus.loading) {
             return const Center(child: Text('No data available'));
+          }
+
+          if (state.data == null) {
+            return const SizedBox.shrink();
           }
 
           final data = state.data!;
