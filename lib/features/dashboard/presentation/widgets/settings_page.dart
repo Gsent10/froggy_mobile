@@ -33,7 +33,9 @@ class SettingsPage extends StatelessWidget {
                   color: kPrimaryColor,
                 ),
               ),
+
               SizedBox(height: 16),
+
               Text(
                 'Godsent Agundu',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
