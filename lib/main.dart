@@ -15,7 +15,6 @@ import 'package:froggy_mobile/features/transfer/presentation/pages/transfer_page
 import 'package:froggy_mobile/features/wallet/presentation/pages/wallet_details_page.dart';
 import 'package:froggy_mobile/features/wallet/presentation/pages/wallet_list_page.dart';
 import 'package:froggy_mobile/features/wallet/presentation/pages/add_wallet_page.dart';
-import 'package:froggy_mobile/features/withdraw/presentation/pages/withdraw_page.dart';
 import 'package:froggy_mobile/features/launch/bloc/launch_bloc.dart';
 import 'package:froggy_mobile/features/launch/presentation/pages/launch_screen.dart';
 
@@ -72,7 +71,6 @@ class MyApp extends StatelessWidget {
           '/wallet-list': (context) => const WalletListPage(),
           '/transfer': (context) => const TransferPage(),
           '/topup': (context) => const TopupPage(),
-          '/withdraw': (context) => const WithdrawPage(),
           '/add-wallet': (context) => const AddWalletPage(),
         },
       ),
