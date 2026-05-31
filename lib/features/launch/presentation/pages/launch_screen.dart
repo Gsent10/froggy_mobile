@@ -23,13 +23,11 @@ class LaunchScreen extends StatelessWidget {
               builder: (_) => const RegisterPage(isFirstPage: true),
             ),
           );
+        } else if (state.status == LaunchStatus.toDashboard) {
+          Navigator.of(context).pushReplacementNamed('/dashboard');
         }
       },
-      child: const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
+      child: const Scaffold(body: Center(child: CircularProgressIndicator())),
     );
   }
 }
