@@ -9,7 +9,7 @@ class Loading extends StatelessWidget {
     return Container(
       width: context.screenWidth,
       height: context.screenHeight,
-      decoration: BoxDecoration(color: kWhiteColor),
+      decoration: BoxDecoration(color: kBlackColor.withOpacity(0.7)),
       child: Center(child: Image.asset('assets/loading.gif', width: 100)),
     );
   }
