@@ -10,7 +10,8 @@ class LaunchBloc extends Bloc<LaunchEvent, LaunchState> {
       final bool? isLaunched = UserSimplePreferences.getLaunched();
 
       if (isLaunched == true) {
-        emit(state.copyWith(status: LaunchStatus.toLogin));
+        emit(state.copyWith(status: LaunchStatus.toDashboard));
+        // emit(state.copyWith(status: LaunchStatus.toLogin));
       } else {
         // If not launched before, set launched to true and go to register
         await UserSimplePreferences.setLaunched(true);
