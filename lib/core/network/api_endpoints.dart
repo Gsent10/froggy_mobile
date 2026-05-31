@@ -41,6 +41,9 @@ class ApiEndpoints {
   // Transfer Endpoint
   static const String TRANSFER = '/wallets/transfer';
 
+  static const String ACTIVITY = '/activity';
+  static const String LOGS = '/logs';
+
   Future<Map<String, String>> authRequestHeaders() async {
     return {
       "Content-Type": "application/json",
