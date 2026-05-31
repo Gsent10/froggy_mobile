@@ -332,13 +332,8 @@ class _BalanceCard extends StatefulWidget {
 }
 
 class _BalanceCardState extends State<_BalanceCard> {
-  // FIX: Use a Map instead of a fixed-length List so entries are created
-  // lazily. The original List was allocated once in initState with the wallet
-  // count at that moment (often 0 or 1 before the API responds), then indexed
-  // with a higher index once more wallets arrived — causing the RangeError.
   final Map<int, ValueNotifier<bool>> _visibilityNotifiers = {};
 
-  /// Returns an existing notifier or creates one on first access.
   ValueNotifier<bool> _notifierFor(int index) =>
       _visibilityNotifiers.putIfAbsent(index, () => ValueNotifier(false));
 
