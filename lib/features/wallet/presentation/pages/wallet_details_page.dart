@@ -104,7 +104,7 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 ),
                               ),
                               SizedBox(height: sh * 0.02),
-                              if (state.activities.isEmpty)
+                              if (state.logs.isEmpty)
                                 Padding(
                                   padding: EdgeInsets.symmetric(
                                     vertical: context.screenHeight * kSpacingL,
@@ -164,15 +164,15 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                 ListView.separated(
                                   shrinkWrap: true,
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: state.activities.length,
+                                  itemCount: state.logs.length,
                                   separatorBuilder: (_, __) => Divider(
                                     height: sh * kSpacingM,
                                     thickness: 1,
                                     color: const Color(0xffF2F4F8),
                                   ),
                                   itemBuilder: (context, index) {
-                                    return _ActivityTile(
-                                      activity: state.activities[index],
+                                    return _LogTile(
+                                      log: state.logs[index],
                                       wallet: state.wallet!,
                                       formatAmount: _formatAmount,
                                     );
@@ -193,13 +193,13 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
   }
 }
 
-class _ActivityTile extends StatelessWidget {
-  final Activity activity;
+class _LogTile extends StatelessWidget {
+  final Log log;
   final Wallet wallet;
   final String Function(double) formatAmount;
 
-  const _ActivityTile({
-    required this.activity,
+  const _LogTile({
+    required this.log,
     required this.wallet,
     required this.formatAmount,
   });
@@ -207,7 +207,7 @@ class _ActivityTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final sw = context.screenWidth;
-    final isCredit = activity.isCredit;
+    final isCredit = log.isCredit;
 
     return Row(
       children: [
@@ -232,7 +232,7 @@ class _ActivityTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "",
+                log.description,
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * kFontXS,
@@ -243,7 +243,7 @@ class _ActivityTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                "activity.date",
+                log.createdAt,
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * (kFontXS - 0.005),
@@ -254,7 +254,7 @@ class _ActivityTile extends StatelessWidget {
           ),
         ),
         Text(
-          '${isCredit ? '+' : '-'}${wallet.currencySymbol}${formatAmount(activity.amount)}',
+          '${isCredit ? '+' : '-'}${wallet.currencySymbol}${formatAmount(log.amount)}',
           style: SafeGoogleFont(
             'DM Sans',
             fontSize: sw * kFontXS,
