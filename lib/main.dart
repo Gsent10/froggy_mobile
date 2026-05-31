@@ -32,7 +32,9 @@ class MyApp extends StatelessWidget {
           create: (context) => LaunchBloc()..add(CheckLaunchStatus()),
         ),
         BlocProvider(create: (context) => AuthBloc()),
-        BlocProvider(create: (context) => DashboardBloc()),
+        BlocProvider(
+          create: (context) => DashboardBloc()..add(FetchDashboardData()),
+        ),
       ],
       child: MaterialApp(
         title: 'Froggy Mobile',
