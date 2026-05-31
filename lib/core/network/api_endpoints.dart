@@ -38,6 +38,9 @@ class ApiEndpoints {
   // Top-up Endpoint
   static const String TOPUP = '/wallets/topup';
 
+  // Transfer Endpoint
+  static const String TRANSFER = '/wallets/transfer';
+
   Future<Map<String, String>> authRequestHeaders() async {
     return {
       "Content-Type": "application/json",
