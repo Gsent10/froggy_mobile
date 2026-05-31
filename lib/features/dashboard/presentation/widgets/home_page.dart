@@ -4,9 +4,6 @@ import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/data/models/dashboard_models.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Wallet card theming by currency code
-// ─────────────────────────────────────────────────────────────────────────────
 class _WalletTheme {
   final Color cardColor;
   final Color accentColor;
@@ -63,9 +60,6 @@ _WalletTheme _themeFor(String currencyCode) =>
       countryName: 'Unknown',
     );
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Home Page
-// ─────────────────────────────────────────────────────────────────────────────
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
@@ -110,22 +104,18 @@ class HomePage extends StatelessWidget {
                   children: [
                     SizedBox(height: context.screenHeight * kSpacingXL),
 
-                    // ── Top bar ──────────────────────────────────────────
                     _TopBar(userInfo: data.userInfo),
 
                     SizedBox(height: context.screenHeight * kSpacingM),
 
-                    // ── Balance card(s) ──────────────────────────────────
                     _BalanceCard(wallets: data.wallets),
 
                     SizedBox(height: context.screenHeight * kSpacingL),
 
-                    // ── Quick actions ────────────────────────────────────
                     const _QuickActions(),
 
                     SizedBox(height: context.screenHeight * kSpacingL),
 
-                    // ── Recent transactions header (hidden when empty) ───
                     if (recentActivities.isNotEmpty)
                       _SectionHeader(
                         title: 'Recent transactions',
@@ -137,7 +127,6 @@ class HomePage extends StatelessWidget {
 
                     SizedBox(height: context.screenHeight * kSpacingS),
 
-                    // ── Transactions list or empty state ─────────────────
                     if (recentActivities.isEmpty)
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -220,9 +209,6 @@ class HomePage extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Top Bar
-// ─────────────────────────────────────────────────────────────────────────────
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.userInfo});
 
@@ -288,9 +274,6 @@ class _TopBar extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Balance Card — horizontally scrollable, one card per wallet
-// ─────────────────────────────────────────────────────────────────────────────
 class _BalanceCard extends StatefulWidget {
   const _BalanceCard({required this.wallets});
 
@@ -491,10 +474,8 @@ class _SingleWalletCard extends StatelessWidget {
                 ],
               ),
 
-              // Fixed gap instead of Spacer — no unbounded height risk
               SizedBox(height: sh * 0.12),
 
-              // ── Balance ──────────────────────────────────────────────
               Text(
                 visible ? '$symbol${formatAmount(balance)}' : '$symbol ••••••',
                 style: SafeGoogleFont(
@@ -552,7 +533,7 @@ class _QuickActions extends StatelessWidget {
     const actions = [
       (Icons.send_rounded, 'Transfer'),
       (Icons.add_circle_outline_rounded, 'Add money'),
-      (Icons.credit_card_rounded, 'Cards'),
+      (Icons.credit_card_rounded, 'Wallets'),
       (Icons.receipt_long_rounded, 'Bills'),
     ];
 
