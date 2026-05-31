@@ -70,30 +70,41 @@ class Wallet {
 
 class Activity {
   final int id;
-  final String title;
-  final String subtitle;
+  final String reference;
+  final String type;
+  final String status;
   final double amount;
-  final String date;
+  final String currencyCode;
+  final String paymentMethod;
+  final String? processedAt;
+  final String createdAt;
   final bool isCredit;
 
   Activity({
     required this.id,
-    required this.title,
-    required this.subtitle,
+    required this.reference,
+    required this.type,
+    required this.status,
     required this.amount,
-    required this.date,
+    required this.currencyCode,
+    required this.paymentMethod,
+    this.processedAt,
+    required this.createdAt,
     required this.isCredit,
   });
 
   factory Activity.fromJson(Map<String, dynamic> json) {
     return Activity(
       id: json['id'] ?? 0,
-      title:
-          json['title'] ?? json['remark'] ?? json['description'] ?? 'Unknown',
-      subtitle: json['subtitle'] ?? '',
+      reference: json['reference'] ?? '',
+      type: json['type'] ?? '',
+      status: json['status'] ?? '',
       amount: _parseDouble(json['amount']),
-      date: json['date'] ?? json['created_at'] ?? '',
-      isCredit: json['is_credit'] ?? (json['type'] == 'credit'),
+      currencyCode: json['currency_code'] ?? 'NGN',
+      paymentMethod: json['payment_method'] ?? '',
+      processedAt: json['processed_at'],
+      createdAt: json['created_at'] ?? '',
+      isCredit: json['type'] == 'topup',
     );
   }
 }
