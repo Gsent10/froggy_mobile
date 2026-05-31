@@ -8,7 +8,9 @@ import 'package:froggy_mobile/features/auth/presentation/pages/new_password_page
 import 'package:froggy_mobile/features/auth/presentation/pages/register_page.dart';
 import 'package:froggy_mobile/features/auth/presentation/pages/verify_otp_page.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
+import 'package:froggy_mobile/features/wallet/bloc/wallet_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:froggy_mobile/features/wallet/presentation/pages/wallet_details_page.dart';
 import 'package:froggy_mobile/features/launch/bloc/launch_bloc.dart';
 import 'package:froggy_mobile/features/launch/presentation/pages/launch_screen.dart';
 
@@ -35,6 +37,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => DashboardBloc()..add(FetchDashboardData()),
         ),
+        BlocProvider(create: (context) => WalletBloc()),
       ],
       child: MaterialApp(
         title: 'Froggy Mobile',
@@ -45,6 +48,15 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         home: const LaunchScreen(),
+        onGenerateRoute: (settings) {
+          if (settings.name == '/wallet-details') {
+            final walletId = settings.arguments as int;
+            return MaterialPageRoute(
+              builder: (context) => WalletDetailsPage(walletId: walletId),
+            );
+          }
+          return null;
+        },
         routes: {
           '/login': (context) => const LoginPage(),
           '/register': (context) => const RegisterPage(),
