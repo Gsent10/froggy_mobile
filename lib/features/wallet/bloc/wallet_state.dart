@@ -7,7 +7,7 @@ enum WalletCreateStatus { idle, loading, success, error }
 class WalletState {
   final WalletStatus status;
   final Wallet? wallet;
-  final List<Activity> activities;
+  final List<Log> logs;
   final String? errorMessage;
 
   // Create wallet fields
@@ -18,7 +18,7 @@ class WalletState {
   WalletState({
     this.status = WalletStatus.initial,
     this.wallet,
-    this.activities = const [],
+    this.logs = const [],
     this.errorMessage,
     this.createStatus = WalletCreateStatus.idle,
     this.createdWallet,
@@ -28,7 +28,7 @@ class WalletState {
   WalletState copyWith({
     WalletStatus? status,
     Wallet? wallet,
-    List<Activity>? activities,
+    List<Log>? logs,
     String? errorMessage,
     WalletCreateStatus? createStatus,
     Wallet? createdWallet,
@@ -37,7 +37,7 @@ class WalletState {
     return WalletState(
       status: status ?? this.status,
       wallet: wallet ?? this.wallet,
-      activities: activities ?? this.activities,
+      logs: logs ?? this.logs,
       errorMessage: errorMessage ?? this.errorMessage,
       createStatus: createStatus ?? this.createStatus,
       createdWallet: createdWallet ?? this.createdWallet,
