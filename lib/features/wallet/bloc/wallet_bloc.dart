@@ -20,15 +20,15 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         ),
         onSuccess: (data) {
           final wallet = Wallet.fromJson(data['wallet'] ?? {});
-          final activities = (data['activities'] as List? ?? [])
-              .map((e) => Activity.fromJson(e))
+          final logs = (data['logs'] as List? ?? [])
+              .map((e) => Log.fromJson(e))
               .toList();
 
           emit(
             state.copyWith(
               status: WalletStatus.loaded,
               wallet: wallet,
-              activities: activities,
+              logs: logs,
             ),
           );
         },
