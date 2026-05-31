@@ -1,6 +1,6 @@
 part of 'launch_bloc.dart';
 
-enum LaunchStatus { initial, toLogin, toRegister }
+enum LaunchStatus { initial, toLogin, toRegister, toDashboard }
 
 class LaunchState {
   final LaunchStatus status;
