@@ -109,6 +109,41 @@ class Activity {
   }
 }
 
+class Log {
+  final int id;
+  final String type;
+  final String status;
+  final double amount;
+  final String currencyCode;
+  final String description;
+  final String createdAt;
+  final bool isCredit;
+
+  Log({
+    required this.id,
+    required this.type,
+    required this.status,
+    required this.amount,
+    required this.currencyCode,
+    required this.description,
+    required this.createdAt,
+    required this.isCredit,
+  });
+
+  factory Log.fromJson(Map<String, dynamic> json) {
+    return Log(
+      id: json['id'] ?? 0,
+      type: json['type'] ?? '',
+      status: json['status'] ?? '',
+      amount: _parseDouble(json['amount']),
+      currencyCode: json['currency_code'] ?? 'NGN',
+      description: json['description'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      isCredit: json['type'] == 'topup',
+    );
+  }
+}
+
 class UserInfo {
   final String fullName;
   final String? profileImage;
