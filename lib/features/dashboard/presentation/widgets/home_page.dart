@@ -62,34 +62,21 @@ class HomePage extends StatelessWidget {
 
                     const _QuickActions(),
 
-                    SizedBox(height: context.screenHeight * kSpacingM),
+                    SizedBox(height: context.screenHeight * kSpacingL),
 
-                    _SectionHeader(
-                      title: 'Recent transactions',
-                      actionLabel: 'View all',
-                      onTap: () {
-                        // TODO: navigate to full transactions screen
-                      },
-                    ),
+                    if (recentActivities.isNotEmpty)
+                      _SectionHeader(
+                        title: 'Recent transactions',
+                        actionLabel: 'View all',
+                        onTap: () {
+                          // TODO: navigate to full transactions screen
+                        },
+                      ),
 
                     SizedBox(height: context.screenHeight * kSpacingS),
 
                     if (recentActivities.isEmpty)
-                      Padding(
-                        padding: EdgeInsets.symmetric(
-                          vertical: context.screenHeight * kSpacingM,
-                        ),
-                        child: Center(
-                          child: Text(
-                            'No recent transactions',
-                            style: SafeGoogleFont(
-                              'DM Sans',
-                              fontSize: context.screenWidth * kFontXS,
-                              color: kSecondaryColor,
-                            ),
-                          ),
-                        ),
-                      )
+                      SizedBox()
                     else
                       ListView.separated(
                         shrinkWrap: true,
