@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/data/models/dashboard_models.dart';
-import 'package:froggy_mobile/features/wallet/presentation/pages/wallet_details_page.dart';
 
 class _WalletTheme {
   final Color cardColor;
