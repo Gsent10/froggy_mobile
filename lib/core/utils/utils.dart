@@ -40,6 +40,26 @@ const kFontM = 0.05;
 const kFontS = 0.04;
 const kFontXS = 0.03;
 
+String getFlagPath(String currencyOrCountryCode) {
+  final Map<String, String> mapping = {
+    'NGN': 'NG',
+    'GBP': 'GB',
+    'USD': 'US',
+    'GHS': 'GH',
+    'KES': 'KE',
+    'NG': 'NG',
+    'GB': 'GB',
+    'US': 'US',
+    'GH': 'GH',
+    'KE': 'KE',
+  };
+
+  final code =
+      mapping[currencyOrCountryCode.toUpperCase()] ??
+      'US'; // Default to US if not found
+  return 'assets/flags/$code.png';
+}
+
 TextStyle SafeGoogleFont(
   String fontFamily, {
   TextStyle? textStyle,
