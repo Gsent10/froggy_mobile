@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:froggy_mobile/core/utils/utils.dart';
-import 'package:froggy_mobile/features/auth/bloc/auth_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
 import 'package:froggy_mobile/features/dashboard/presentation/widgets/home_page.dart';
 import 'package:froggy_mobile/features/dashboard/presentation/widgets/rates_page.dart';
@@ -17,20 +16,6 @@ class DashboardPage extends StatelessWidget {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(
-            title: const Text('Dashboard'),
-            actions: [
-              IconButton(
-                onPressed: () {
-                  context.read<AuthBloc>().add(LogoutRequested());
-                  Navigator.of(
-                    context,
-                  ).pushNamedAndRemoveUntil('/login', (route) => false);
-                },
-                icon: const Icon(Icons.logout),
-              ),
-            ],
-          ),
           body: _pages[state.currentIndex],
           bottomNavigationBar: Container(
             height: context.screenHeight * 0.09,
