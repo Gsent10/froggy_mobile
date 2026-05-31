@@ -31,6 +31,9 @@ class ApiEndpoints {
   static const String RESET_PASSWORD = '/reset-password';
   static const String LOGOUT = '/logout';
 
+  // Dashboard Endpoints
+  static const String DASHBOARD = '/dashboard';
+
   Future<Map<String, String>> authRequestHeaders() async {
     return {
       "Content-Type": "application/json",
