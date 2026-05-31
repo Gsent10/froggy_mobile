@@ -8,6 +8,9 @@ import 'package:froggy_mobile/features/auth/presentation/pages/new_password_page
 import 'package:froggy_mobile/features/auth/presentation/pages/register_page.dart';
 import 'package:froggy_mobile/features/auth/presentation/pages/verify_otp_page.dart';
 import 'package:froggy_mobile/features/dashboard/bloc/dashboard_bloc.dart';
+import 'package:froggy_mobile/features/history/bloc/history_bloc.dart';
+import 'package:froggy_mobile/features/history/presentation/pages/activity_page.dart';
+import 'package:froggy_mobile/features/history/presentation/pages/transactions_page.dart';
 import 'package:froggy_mobile/features/topup/bloc/topup_bloc.dart';
 import 'package:froggy_mobile/features/topup/presentation/pages/topup_result_page.dart';
 import 'package:froggy_mobile/features/transfer/bloc/transfer_bloc.dart';
@@ -85,6 +88,14 @@ class MyApp extends StatelessWidget {
           ),
           '/topup-result': (context) => const TopupResultPage(),
           '/add-wallet': (context) => const AddWalletPage(),
+          '/transactions': (context) => BlocProvider(
+            create: (_) => HistoryBloc(),
+            child: const TransactionsPage(),
+          ),
+          '/activity': (context) => BlocProvider(
+            create: (_) => HistoryBloc(),
+            child: const ActivityPage(),
+          ),
         },
       ),
     );
