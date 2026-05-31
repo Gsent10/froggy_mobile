@@ -22,13 +22,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final phoneController = TextEditingController();
   final passwordController = TextEditingController();
 
-  String selectedCountryCode = 'NG';
+  String selectedCountryCode = 'GB';
   final List<Map<String, String>> countries = [
-    {'code': 'GB', 'name': 'United Kingdom', 'flag': 'assets/flags/GB.png'},
-    {'code': 'NG', 'name': 'Nigeria', 'flag': 'assets/flags/NG.png'},
-    {'code': 'US', 'name': 'United States', 'flag': 'assets/flags/US.png'},
-    {'code': 'GH', 'name': 'Ghana', 'flag': 'assets/flags/GH.png'},
-    {'code': 'KE', 'name': 'Kenya', 'flag': 'assets/flags/KE.png'},
+    {'code': 'GB', 'name': 'United Kingdom'},
+    {'code': 'NG', 'name': 'Nigeria'},
+    {'code': 'US', 'name': 'United States'},
+    {'code': 'GH', 'name': 'Ghana'},
+    {'code': 'KE', 'name': 'Kenya'},
   ];
 
   @override
@@ -94,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                   return DropdownMenuItem(
                                     value: country['code'],
                                     child: Image.asset(
-                                      country['flag']!,
+                                      getFlagPath(country['code']!),
                                       width: 32,
                                       height: 24,
                                       fit: BoxFit.cover,
