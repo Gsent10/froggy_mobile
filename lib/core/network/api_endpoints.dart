@@ -33,6 +33,7 @@ class ApiEndpoints {
 
   // Dashboard Endpoints
   static const String DASHBOARD = '/dashboard';
+  static const String WALLET_DETAILS = '/wallets'; // Usage: WALLET_DETAILS/id
 
   Future<Map<String, String>> authRequestHeaders() async {
     return {
