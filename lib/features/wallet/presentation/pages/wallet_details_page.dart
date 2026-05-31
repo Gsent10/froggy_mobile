@@ -102,17 +102,58 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                               ),
                               SizedBox(height: sh * 0.02),
                               if (state.activities.isEmpty)
-                                Center(
-                                  child: Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      vertical: sh * 0.1,
-                                    ),
-                                    child: Text(
-                                      'No activity for this wallet',
-                                      style: SafeGoogleFont(
-                                        'DM Sans',
-                                        color: kSecondaryColor,
-                                      ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    vertical: context.screenHeight * kSpacingL,
+                                  ),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Container(
+                                          width: context.screenWidth * 0.18,
+                                          height: context.screenWidth * 0.18,
+                                          decoration: const BoxDecoration(
+                                            color: Color(0xffF2F4F8),
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: Icon(
+                                            Icons.receipt_long_outlined,
+                                            size: context.screenWidth * 0.08,
+                                            color: kSecondaryColor,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height:
+                                              context.screenHeight * kSpacingM,
+                                        ),
+                                        Text(
+                                          'No activity yet',
+                                          style: SafeGoogleFont(
+                                            'DM Sans',
+                                            fontSize:
+                                                context.screenWidth * kFontS,
+                                            fontWeight: FontWeight.w600,
+                                            color: kBlackColor,
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height:
+                                              context.screenHeight * kSpacingS,
+                                        ),
+                                        Text(
+                                          'Make a transfer or add money\nto get started',
+                                          textAlign: TextAlign.center,
+                                          style: SafeGoogleFont(
+                                            'DM Sans',
+                                            fontSize:
+                                                context.screenWidth *
+                                                (kFontXS - 0.005),
+                                            color: kSecondaryColor,
+                                            height: 1.5,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 )
