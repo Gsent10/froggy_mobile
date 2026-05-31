@@ -24,7 +24,15 @@ class SettingsPage extends StatelessWidget {
             children: [
               SizedBox(height: context.screenHeight * kBarHeight),
 
-              CircleAvatar(radius: 50, child: Icon(Icons.person, size: 70)),
+              CircleAvatar(
+                radius: 50,
+                backgroundColor: Color(0xffE8EDF8),
+                child: Icon(
+                  Icons.person_outline_rounded,
+                  size: 70,
+                  color: kPrimaryColor,
+                ),
+              ),
               SizedBox(height: 16),
               Text(
                 'Godsent Agundu',
