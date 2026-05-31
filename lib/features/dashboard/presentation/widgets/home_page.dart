@@ -161,30 +161,19 @@ class HomePage extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: context.screenHeight * kSpacingXL),
-
                     _TopBar(userInfo: data.userInfo),
-
                     SizedBox(height: context.screenHeight * kSpacingM),
-
                     _BalanceCard(wallets: data.wallets),
-
                     SizedBox(height: context.screenHeight * kSpacingL),
-
                     const _QuickActions(),
-
                     SizedBox(height: context.screenHeight * kSpacingL),
-
                     if (recentActivities.isNotEmpty)
                       _SectionHeader(
                         title: 'Recent transactions',
                         actionLabel: 'View all',
-                        onTap: () {
-                          // TODO: navigate to full transactions screen
-                        },
+                        onTap: () {},
                       ),
-
                     SizedBox(height: context.screenHeight * kSpacingS),
-
                     if (recentActivities.isEmpty)
                       Padding(
                         padding: EdgeInsets.symmetric(
@@ -254,7 +243,6 @@ class HomePage extends StatelessWidget {
                           );
                         },
                       ),
-
                     SizedBox(height: context.screenHeight * kSpacingM),
                   ],
                 ),
@@ -266,6 +254,8 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+// ─── Top bar ────────────────────────────────────────────────────────────────
 
 class _TopBar extends StatelessWidget {
   const _TopBar({required this.userInfo});
@@ -318,9 +308,7 @@ class _TopBar extends StatelessWidget {
         ),
         const Spacer(),
         GestureDetector(
-          onTap: () {
-            // TODO: navigate to recent activity screen
-          },
+          onTap: () {},
           child: Icon(
             Icons.history_rounded,
             size: sw * 0.06,
@@ -332,6 +320,8 @@ class _TopBar extends StatelessWidget {
   }
 }
 
+// ─── Balance card ────────────────────────────────────────────────────────────
+
 class _BalanceCard extends StatefulWidget {
   const _BalanceCard({required this.wallets});
 
@@ -342,20 +332,19 @@ class _BalanceCard extends StatefulWidget {
 }
 
 class _BalanceCardState extends State<_BalanceCard> {
-  late final List<ValueNotifier<bool>> _visibilityNotifiers;
+  // FIX: Use a Map instead of a fixed-length List so entries are created
+  // lazily. The original List was allocated once in initState with the wallet
+  // count at that moment (often 0 or 1 before the API responds), then indexed
+  // with a higher index once more wallets arrived — causing the RangeError.
+  final Map<int, ValueNotifier<bool>> _visibilityNotifiers = {};
 
-  @override
-  void initState() {
-    super.initState();
-    _visibilityNotifiers = List.generate(
-      widget.wallets.isEmpty ? 1 : widget.wallets.length,
-      (_) => ValueNotifier(false),
-    );
-  }
+  /// Returns an existing notifier or creates one on first access.
+  ValueNotifier<bool> _notifierFor(int index) =>
+      _visibilityNotifiers.putIfAbsent(index, () => ValueNotifier(false));
 
   @override
   void dispose() {
-    for (final n in _visibilityNotifiers) {
+    for (final n in _visibilityNotifiers.values) {
       n.dispose();
     }
     super.dispose();
@@ -384,13 +373,12 @@ class _BalanceCardState extends State<_BalanceCard> {
           cardHeight: cardHeight,
           wallet: null,
           theme: _themeFor('NGN'),
-          visibilityNotifier: _visibilityNotifiers.first,
+          visibilityNotifier: _notifierFor(0),
           formatAmount: _formatAmount,
         ),
       );
     }
 
-    // One wallet — full width, fixed height, no scroll chrome
     if (widget.wallets.length == 1) {
       return SizedBox(
         height: cardHeight,
@@ -399,7 +387,7 @@ class _BalanceCardState extends State<_BalanceCard> {
           cardHeight: cardHeight,
           wallet: widget.wallets.first,
           theme: _themeFor(widget.wallets.first.currencyCode),
-          visibilityNotifier: _visibilityNotifiers.first,
+          visibilityNotifier: _notifierFor(0),
           formatAmount: _formatAmount,
         ),
       );
@@ -409,8 +397,6 @@ class _BalanceCardState extends State<_BalanceCard> {
       height: cardHeight,
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        // Negative margin trick: allow cards to bleed past the
-        // parent padding so the peek is visible, without Clip.none.
         child: Row(
           children: [
             for (int i = 0; i < widget.wallets.length; i++) ...[
@@ -419,7 +405,7 @@ class _BalanceCardState extends State<_BalanceCard> {
                 cardHeight: cardHeight,
                 wallet: widget.wallets[i],
                 theme: _themeFor(widget.wallets[i].currencyCode),
-                visibilityNotifier: _visibilityNotifiers[i],
+                visibilityNotifier: _notifierFor(i), // safe — grows on demand
                 formatAmount: _formatAmount,
               ),
               if (i < widget.wallets.length - 1) SizedBox(width: sw * 0.03),
@@ -430,6 +416,8 @@ class _BalanceCardState extends State<_BalanceCard> {
     );
   }
 }
+
+// ─── Single wallet card ───────────────────────────────────────────────────────
 
 class _SingleWalletCard extends StatelessWidget {
   const _SingleWalletCard({
@@ -452,7 +440,6 @@ class _SingleWalletCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final sw = cardWidth;
     final sh = cardHeight;
-
     final symbol = wallet?.currencySymbol ?? '₦';
     final balance = wallet?.balance ?? 0.0;
 
@@ -479,8 +466,6 @@ class _SingleWalletCard extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            // mainAxisSize must NOT be min — we want the column to fill
-            // the fixed height so spacing is distributed correctly.
             mainAxisSize: MainAxisSize.max,
             children: [
               Row(
@@ -530,9 +515,7 @@ class _SingleWalletCard extends StatelessWidget {
                   ),
                 ],
               ),
-
               SizedBox(height: sh * 0.12),
-
               Text(
                 visible ? '$symbol${formatAmount(balance)}' : '$symbol ••••••',
                 style: SafeGoogleFont(
@@ -542,7 +525,6 @@ class _SingleWalletCard extends StatelessWidget {
                   color: kWhiteColor,
                 ),
               ),
-
               Text(
                 'Wallet balance',
                 style: SafeGoogleFont(
@@ -552,9 +534,7 @@ class _SingleWalletCard extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-
               SizedBox(height: sh * 0.07),
-
               GestureDetector(
                 onTap: () {
                   if (wallet != null) {
@@ -584,6 +564,8 @@ class _SingleWalletCard extends StatelessWidget {
     );
   }
 }
+
+// ─── Quick actions ───────────────────────────────────────────────────────────
 
 class _QuickActions extends StatelessWidget {
   const _QuickActions();
@@ -650,6 +632,8 @@ class _QuickActions extends StatelessWidget {
   }
 }
 
+// ─── Section header ──────────────────────────────────────────────────────────
+
 class _SectionHeader extends StatelessWidget {
   const _SectionHeader({
     required this.title,
@@ -694,6 +678,8 @@ class _SectionHeader extends StatelessWidget {
   }
 }
 
+// ─── Activity tile ───────────────────────────────────────────────────────────
+
 class _ActivityTile extends StatelessWidget {
   const _ActivityTile({required this.activity, required this.wallet});
 
@@ -713,13 +699,11 @@ class _ActivityTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final sw = context.screenWidth;
     final sh = context.screenHeight;
-
     final symbol = wallet?.currencySymbol ?? '₦';
     final isCredit = activity.isCredit;
 
     return Row(
       children: [
-        // Icon container
         Container(
           width: sw * 0.11,
           height: sw * 0.11,
@@ -735,10 +719,7 @@ class _ActivityTile extends StatelessWidget {
             color: isCredit ? const Color(0xff1E7C47) : kSecondaryColor,
           ),
         ),
-
         SizedBox(width: sw * 0.03),
-
-        // Title + subtitle
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -770,8 +751,6 @@ class _ActivityTile extends StatelessWidget {
             ],
           ),
         ),
-
-        // Amount + status badge
         Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
