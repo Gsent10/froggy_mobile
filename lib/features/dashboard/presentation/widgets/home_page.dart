@@ -333,12 +333,32 @@ class _BalanceCard extends StatefulWidget {
 
 class _BalanceCardState extends State<_BalanceCard> {
   final Map<int, ValueNotifier<bool>> _visibilityNotifiers = {};
+  final ScrollController _scrollController = ScrollController();
+  final ValueNotifier<int> _activeIndex = ValueNotifier(0);
 
   ValueNotifier<bool> _notifierFor(int index) =>
       _visibilityNotifiers.putIfAbsent(index, () => ValueNotifier(false));
 
   @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  void _onScroll() {
+    if (!_scrollController.hasClients) return;
+    final sw = _scrollController.position.viewportDimension;
+    final cardWidth = sw * 0.88 + sw * 0.03; // card width + gap
+    final index = (_scrollController.offset / cardWidth).round();
+    final clamped = index.clamp(0, widget.wallets.length - 1);
+    if (_activeIndex.value != clamped) _activeIndex.value = clamped;
+  }
+
+  @override
   void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    _activeIndex.dispose();
     for (final n in _visibilityNotifiers.values) {
       n.dispose();
     }
@@ -388,26 +408,58 @@ class _BalanceCardState extends State<_BalanceCard> {
       );
     }
 
-    return SizedBox(
-      height: cardHeight,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            for (int i = 0; i < widget.wallets.length; i++) ...[
-              _SingleWalletCard(
-                cardWidth: sw * 0.88,
-                cardHeight: cardHeight,
-                wallet: widget.wallets[i],
-                theme: _themeFor(widget.wallets[i].currencyCode),
-                visibilityNotifier: _notifierFor(i), // safe — grows on demand
-                formatAmount: _formatAmount,
-              ),
-              if (i < widget.wallets.length - 1) SizedBox(width: sw * 0.03),
-            ],
-          ],
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(
+          height: cardHeight,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            scrollDirection: Axis.horizontal,
+            physics: const PageScrollPhysics(),
+            child: Row(
+              children: [
+                for (int i = 0; i < widget.wallets.length; i++) ...[
+                  _SingleWalletCard(
+                    cardWidth: sw * 0.88,
+                    cardHeight: cardHeight,
+                    wallet: widget.wallets[i],
+                    theme: _themeFor(widget.wallets[i].currencyCode),
+                    visibilityNotifier: _notifierFor(i),
+                    formatAmount: _formatAmount,
+                  ),
+                  if (i < widget.wallets.length - 1) SizedBox(width: sw * 0.03),
+                ],
+              ],
+            ),
+          ),
         ),
-      ),
+        SizedBox(height: sw * 0.03),
+        ValueListenableBuilder<int>(
+          valueListenable: _activeIndex,
+          builder: (context, active, _) {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(widget.wallets.length, (i) {
+                final isActive = i == active;
+                return AnimatedContainer(
+                  duration: const Duration(milliseconds: 250),
+                  curve: Curves.easeInOut,
+                  margin: EdgeInsets.symmetric(horizontal: sw * 0.008),
+                  width: isActive ? sw * 0.05 : sw * 0.02,
+                  height: sw * 0.02,
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? kPrimaryColor
+                        : kPrimaryColor.withOpacity(0.25),
+                    borderRadius: BorderRadius.circular(sw * 0.01),
+                  ),
+                );
+              }),
+            );
+          },
+        ),
+      ],
     );
   }
 }
