@@ -35,6 +35,9 @@ class ApiEndpoints {
   static const String DASHBOARD = '/dashboard';
   static const String WALLETS = '/wallets';
 
+  // Top-up Endpoint
+  static const String TOPUP = 'wallets/topup';
+
   Future<Map<String, String>> authRequestHeaders() async {
     return {
       "Content-Type": "application/json",
