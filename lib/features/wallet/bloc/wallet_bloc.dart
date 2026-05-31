@@ -15,7 +15,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
       await _apiEndpoints.safeSendRequest(
         request: (dio, headers) => dio.get(
-          '${ApiEndpoints.WALLET_DETAILS}/${event.walletId}',
+          '${ApiEndpoints.WALLETS}/${event.walletId}',
           options: Options(headers: headers),
         ),
         onSuccess: (data) {
@@ -23,18 +23,17 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
           final activities = (data['activities'] as List? ?? [])
               .map((e) => Activity.fromJson(e))
               .toList();
-          
-          emit(state.copyWith(
-            status: WalletStatus.loaded,
-            wallet: wallet,
-            activities: activities,
-          ));
+
+          emit(
+            state.copyWith(
+              status: WalletStatus.loaded,
+              wallet: wallet,
+              activities: activities,
+            ),
+          );
         },
         onError: (error) {
-          emit(state.copyWith(
-            status: WalletStatus.error,
-            errorMessage: error,
-          ));
+          emit(state.copyWith(status: WalletStatus.error, errorMessage: error));
         },
       );
     });
