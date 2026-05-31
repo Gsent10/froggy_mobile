@@ -483,7 +483,6 @@ class _SingleWalletCard extends StatelessWidget {
             // the fixed height so spacing is distributed correctly.
             mainAxisSize: MainAxisSize.max,
             children: [
-              // ── Flag + country name | eye toggle ────────────────────
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
