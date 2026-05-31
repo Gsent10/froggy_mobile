@@ -737,6 +737,83 @@ class _ActivityTile extends StatelessWidget {
     return '$intPart.${parts[1]}';
   }
 
+  String get _title {
+    switch (activity.type) {
+      case 'topup':
+        return 'Top Up';
+      case 'transfer':
+        return 'Transfer';
+      case 'withdrawal':
+        return 'Withdrawal';
+      default:
+        return activity.type.isNotEmpty
+            ? activity.type[0].toUpperCase() + activity.type.substring(1)
+            : activity.reference;
+    }
+  }
+
+  String get _subtitle {
+    final method = activity.paymentMethod.replaceAll('_', ' ');
+    return method.isNotEmpty
+        ? method[0].toUpperCase() + method.substring(1)
+        : activity.reference;
+  }
+
+  Color get _statusColor {
+    switch (activity.status) {
+      case 'success':
+        return const Color(0xff1E7C47);
+      case 'pending':
+        return const Color(0xffF59E0B);
+      case 'failed':
+        return const Color(0xffEF4444);
+      default:
+        return kSecondaryColor;
+    }
+  }
+
+  IconData get _statusIcon {
+    switch (activity.status) {
+      case 'success':
+        return Icons.check_rounded;
+      case 'pending':
+        return Icons.access_time_rounded;
+      case 'failed':
+        return Icons.close_rounded;
+      default:
+        return Icons.help_outline_rounded;
+    }
+  }
+
+  String get _formattedDate {
+    try {
+      final dt = DateTime.parse(activity.createdAt).toLocal();
+      return '${dt.day} ${_monthName(dt.month)}, ${_padTwo(dt.hour)}:${_padTwo(dt.minute)}';
+    } catch (_) {
+      return activity.createdAt;
+    }
+  }
+
+  String _monthName(int month) {
+    const months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
+    return months[month - 1];
+  }
+
+  String _padTwo(int value) => value.toString().padLeft(2, '0');
+
   @override
   Widget build(BuildContext context) {
     final sw = context.screenWidth;
@@ -767,7 +844,7 @@ class _ActivityTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                activity.title,
+                _title,
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * kFontXS,
@@ -779,9 +856,7 @@ class _ActivityTile extends StatelessWidget {
               ),
               SizedBox(height: sh * 0.003),
               Text(
-                activity.subtitle.isNotEmpty
-                    ? activity.subtitle
-                    : activity.date,
+                '$_subtitle · $_formattedDate',
                 style: SafeGoogleFont(
                   'DM Sans',
                   fontSize: sw * (kFontXS - 0.005),
@@ -809,15 +884,11 @@ class _ActivityTile extends StatelessWidget {
             Container(
               width: sw * 0.04,
               height: sw * 0.04,
-              decoration: const BoxDecoration(
-                color: Color(0xff1E7C47),
+              decoration: BoxDecoration(
+                color: _statusColor,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.check_rounded,
-                size: sw * 0.025,
-                color: kWhiteColor,
-              ),
+              child: Icon(_statusIcon, size: sw * 0.025, color: kWhiteColor),
             ),
           ],
         ),
