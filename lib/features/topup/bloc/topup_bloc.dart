@@ -7,9 +7,11 @@ part 'topup_event.dart';
 part 'topup_state.dart';
 
 class TopupBloc extends Bloc<TopupEvent, TopupState> {
-  final ApiEndpoints _apiEndpoints = ApiEndpoints();
+  final ApiEndpoints _apiEndpoints;
 
-  TopupBloc() : super(const TopupState()) {
+  TopupBloc({ApiEndpoints? apiEndpoints})
+      : _apiEndpoints = apiEndpoints ?? ApiEndpoints(),
+        super(const TopupState()) {
     on<SubmitTopup>((event, emit) async {
       emit(state.copyWith(status: TopupStatus.loading));
 
