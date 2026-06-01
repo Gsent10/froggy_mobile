@@ -1,7 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:froggy_mobile/core/network/api_endpoints.dart';
-import 'package:froggy_mobile/features/dashboard/data/models/dashboard_models.dart';
 import 'package:froggy_mobile/features/topup/bloc/topup_bloc.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -21,13 +20,6 @@ void main() {
   });
 
   group('TopupBloc', () {
-    final mockWallet = Wallet(
-      id: 1,
-      currencyCode: 'USD',
-      currencySymbol: '\$',
-      balance: 500.0,
-    );
-
     final topupEvent = SubmitTopup(
       amount: 100.0,
       currencyCode: 'USD',
