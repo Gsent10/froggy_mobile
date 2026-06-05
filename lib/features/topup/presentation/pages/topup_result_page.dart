@@ -22,12 +22,10 @@ class TopupResultPage extends StatelessWidget {
             children: [
               SizedBox(height: sh * 0.08),
 
-              // ── Icon ────────────────────────────────────────────────────
               _ResultIcon(success: isSuccess),
 
               SizedBox(height: sh * 0.04),
 
-              // ── Title ────────────────────────────────────────────────────
               Text(
                 isSuccess ? 'Top-Up Successful!' : 'Top-Up Failed',
                 style: SafeGoogleFont(
@@ -57,12 +55,10 @@ class TopupResultPage extends StatelessWidget {
 
               SizedBox(height: sh * 0.05),
 
-              // ── Summary card ──────────────────────────────────────────────
               _SummaryCard(args: args),
 
               const Spacer(),
 
-              // ── Actions ───────────────────────────────────────────────────
               if (isSuccess) ...[
                 SizedBox(
                   width: double.infinity,
@@ -169,8 +165,6 @@ class TopupResultPage extends StatelessWidget {
   }
 }
 
-// ─── Animated result icon ─────────────────────────────────────────────────────
-
 class _ResultIcon extends StatefulWidget {
   final bool success;
   const _ResultIcon({required this.success});
@@ -228,8 +222,6 @@ class _ResultIconState extends State<_ResultIcon>
     );
   }
 }
-
-// ─── Summary card ─────────────────────────────────────────────────────────────
 
 class _SummaryCard extends StatelessWidget {
   final TopupResultArgs args;
