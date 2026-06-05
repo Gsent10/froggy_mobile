@@ -10,8 +10,8 @@ class TopupBloc extends Bloc<TopupEvent, TopupState> {
   final ApiEndpoints _apiEndpoints;
 
   TopupBloc({ApiEndpoints? apiEndpoints})
-      : _apiEndpoints = apiEndpoints ?? ApiEndpoints(),
-        super(const TopupState()) {
+    : _apiEndpoints = apiEndpoints ?? ApiEndpoints(),
+      super(const TopupState()) {
     on<SubmitTopup>((event, emit) async {
       emit(state.copyWith(status: TopupStatus.loading));
 
@@ -42,8 +42,6 @@ class TopupBloc extends Bloc<TopupEvent, TopupState> {
           );
         },
         onError: (error) {
-          // The API returns 422 when payment is declined — surface that
-          // as "failed" (payment declined) vs a real error (network/500).
           final isDeclined =
               error.toLowerCase().contains('declined') ||
               error.toLowerCase().contains('failed');
